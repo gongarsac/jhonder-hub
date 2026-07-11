@@ -1,0 +1,281 @@
+document.getElementById("formCompra").addEventListener("submit", function (e) {
+
+    e.preventDefault();
+
+    const compra = {
+
+        id: generarId("CP"),
+
+        tipo: "Compra",
+
+        fecha: document.getElementById("fecha").value,
+
+        cliente: document.getElementById("cliente").value,
+
+        banco: document.getElementById("banco").value,
+
+        cantidad: Number(document.getElementById("cantidad").value),
+
+        precio: Number(document.getElementById("precio").value),
+
+        total: Number(document.getElementById("total").value),
+
+        disponible: Number(document.getElementById("cantidad").value)
+
+    };
+
+    agregarOperacion(compra);
+
+    cargarCompras();
+
+    alert("✅ Compra guardada correctamente");
+
+    this.reset();
+
+});
+
+document
+    .getElementById("precio")
+    .addEventListener("input", calcularTotal);
+
+document
+    .getElementById("cantidad")
+    .addEventListener("input", calcularTotal);
+
+function calcularTotal() {
+
+    const cantidad = Number(
+        document.getElementById("cantidad").value
+    );
+
+    const precio = Number(
+        document.getElementById("precio").value
+    );
+
+    document.getElementById("total").value =
+        (cantidad * precio).toFixed(2);
+
+}
+
+function cargarCompras() {
+
+    const operaciones = obtenerOperaciones();
+
+    const tbody = document.querySelector(
+        "#tablaCompras tbody"
+    );
+
+    tbody.innerHTML = "";
+
+    let totalComprado = 0;
+
+    let capitalInvertido = 0;
+
+    let disponibleTotal = 0;
+
+    operaciones.forEach(compra => {
+
+        if (compra.tipo === "Compra") {
+
+            totalComprado += compra.cantidad;
+
+            capitalInvertido += compra.total;
+
+            disponibleTotal += compra.disponible;
+
+            tbody.innerHTML += `
+
+            <tr>
+
+                <td>${compra.fecha}</td>
+
+                <td>${compra.cliente}</td>
+
+                <td>${compra.banco}</td>
+
+                <td>${compra.cantidad.toFixed(2)}</td>
+
+                <td>S/ ${compra.precio.toFixed(4)}</td>
+
+                <td>S/ ${compra.total.toFixed(2)}</td>
+
+                <td style="color:#22c55e;font-weight:bold;">
+
+                    ${compra.disponible.toFixed(2)}
+
+                </td>
+
+                <td class="acciones">
+
+                    <button
+                        class="btn-editar"
+                        onclick="editarCompra('${compra.id}')"
+                    >
+
+                        ✏️
+
+                    </button>
+
+                    <button
+                        class="btn-eliminar"
+                        onclick="eliminarCompra('${compra.id}')"
+                    >
+
+                        🗑️
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+            `;
+        }
+
+    });
+
+    document.getElementById("totalComprado").textContent =
+        totalComprado.toFixed(2) + " USDT";
+
+    document.getElementById("capitalInvertido").textContent =
+        "S/ " + capitalInvertido.toFixed(2);
+
+    document.getElementById("usdtDisponible").textContent =
+        disponibleTotal.toFixed(2) + " USDT";
+
+}
+
+function eliminarCompra(id) {
+
+    const confirmar = confirm(
+        "¿Deseas eliminar esta compra?"
+    );
+
+    if (!confirmar) return;
+
+    let operaciones = obtenerOperaciones();
+
+    operaciones = operaciones.filter(
+        operacion => operacion.id !== id
+    );
+
+    actualizarOperaciones(operaciones);
+
+    cargarCompras();
+
+}
+
+const operacionEditar = JSON.parse(
+    localStorage.getItem("operacionEditar")
+);
+
+if (
+    operacionEditar &&
+    operacionEditar.tipo === "Compra"
+) {
+
+    document.getElementById("fecha").value =
+        operacionEditar.fecha;
+
+    document.getElementById("cliente").value =
+        operacionEditar.cliente;
+
+    document.getElementById("banco").value =
+        operacionEditar.banco;
+
+    document.getElementById("cantidad").value =
+        operacionEditar.cantidad;
+
+    document.getElementById("precio").value =
+        operacionEditar.precio;
+
+    document.getElementById("total").value =
+        operacionEditar.total;
+
+    localStorage.removeItem(
+        "operacionEditar"
+    );
+}
+function editarCompra(id) {
+
+    const operaciones = obtenerOperaciones();
+
+    const compra = operaciones.find(
+
+        op => op.id === id
+
+    );
+
+    if (!compra) return;
+
+    document.getElementById("fecha").value =
+
+        compra.fecha;
+
+    document.getElementById("cliente").value =
+
+        compra.cliente;
+
+    document.getElementById("banco").value =
+
+        compra.banco;
+
+    document.getElementById("cantidad").value =
+
+        compra.cantidad;
+
+    document.getElementById("precio").value =
+
+        compra.precio;
+
+    document.getElementById("total").value =
+
+        compra.total;
+
+    const nuevasOperaciones = operaciones.filter(
+
+        op => op.id !== id
+
+    );
+
+    actualizarOperaciones(
+
+        nuevasOperaciones
+
+    );
+
+    cargarCompras();
+
+    alert(
+
+        "✏️ Compra cargada para editar."
+
+    );
+
+}
+function cargarClientesSelect() {
+
+    const clientes = JSON.parse(
+        localStorage.getItem("clientes")
+    ) || [];
+
+    const lista = document.getElementById(
+        "listaClientes"
+    );
+
+    lista.innerHTML = "";
+
+    clientes.forEach(cliente => {
+
+        lista.innerHTML += `
+
+            <option value="${cliente.nombre}"></option>
+
+        `;
+
+    });
+
+}
+
+cargarClientesSelect();
+cargarCompras();         

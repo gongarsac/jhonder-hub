@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Configuración - Jhonder Capital</title>
+
+    <link rel="stylesheet" href="../css/dashboard.css">
+
+</head>
+
+<body>
+
+    <div class="main">
+
+        <div class="hero">
+
+            <h1>⚙️ Configuración</h1>
+
+            <p>
+
+                Administra tu sistema y protege la información.
+
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Respaldo de datos</h2>
+
+            <br>
+
+            <button onclick="exportarDatos()">
+
+                💾 Exportar respaldo
+
+            </button>
+
+            <br><br>
+
+            <input type="file" id="archivoBackup">
+
+            <br><br>
+
+            <button onclick="importarDatos()">
+
+                📂 Importar respaldo
+
+            </button>
+
+        </div>
+
+        <br>
+
+        <div class="card">
+
+            <h2>Peligro</h2>
+
+            <br>
+
+            <button onclick="borrarTodo()">
+
+                🗑️ Borrar todos los datos
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <script src="../js/storage.js"></script>
+
+    <script src="../js/config.js"></script>
+
+</<div class="main">
+
+    <div class="hero">
+
+        <h1>⚙️ Configuración</h1>
+
+        <p>
+            Administra la información del sistema.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Empresa</h2>
+
+        <label>Nombre de la empresa</label>
+
+        <input
+            type="text"
+            id="empresa"
+            placeholder="Jhonder Capital S.A.C."
+        >
+
+        <label>Moneda</label>
+
+        <select id="moneda">
+
+            <option value="S/">Soles (S/)</option>
+
+            <option value="$">Dólares ($)</option>
+
+        </select>
+
+        <br><br>
+
+        <button onclick="guardarConfiguracion()">
+
+            Guardar configuración
+
+        </button>
+
+    </div>
+
+    <br>
+
+    <div class="card">
+
+        <h2>Zona peligrosa</h2>
+        <br>
+
+<div class="card">
+
+    <h2>Respaldo de datos</h2>
+
+    <p>
+
+        Exporta o importa todas las operaciones.
+
+    </p>
+
+    <br>
+
+    <button onclick="exportarDatos()">
+
+        📥 Exportar respaldo
+
+    </button>
+
+    <br><br>
+
+    <input
+        type="file"
+        id="archivoBackup"
+    >
+
+    <br><br>
+
+    <button onclick="importarDatos()">
+
+        📤 Importar respaldo
+
+    </button>
+
+</div>
+
+        <p>
+
+            Eliminar todas las compras, ventas e historial.
+
+        </p>
+
+        <br>
+
+        <button
+            onclick="reiniciarSistema()"
+            class="btn-eliminar"
+        >
+
+            🗑️ Reiniciar sistema
+
+        </button>
+
+    </div>
+
+</div>
+
+<script src="../js/config.js"></script>>
+
+</html>

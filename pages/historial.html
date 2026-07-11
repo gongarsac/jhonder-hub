@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Historial - Jhonder Capital S.A.C.</title>
+
+    <link rel="stylesheet" href="../css/dashboard.css">
+
+</head>
+
+<body>
+
+    <div class="main">
+
+        <div class="hero">
+<div class="empresa-info">
+
+    <div>
+
+        <h3>Jhonder Capital S.A.C.</h3>
+
+        <p>Trading y gestión de USDT</p>
+
+    </div>
+
+    <div class="estado-online">
+
+        🟢 Sistema activo
+
+    </div>
+
+</div>
+            <h1>Historial de Operaciones</h1>
+
+            <p>
+
+                Consulta todas las compras y ventas registradas
+                en Jhonder Capital S.A.C.
+
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Filtros</h2>
+
+            <div class="resumen-historial">
+
+                <div class="card-mini">
+
+                    <h3>Total compras</h3>
+
+                    <p id="resumenCompras">0 USDT</p>
+
+                </div>
+
+                <div class="card-mini">
+
+                    <h3>Total ventas</h3>
+
+                    <p id="resumenVentas">0 USDT</p>
+
+                </div>
+
+                <div class="card-mini">
+
+                    <h3>Ganancia</h3>
+
+                    <p id="resumenGanancia">S/ 0</p>
+
+                </div>
+
+                <div class="card-mini">
+
+                    <h3>Operaciones</h3>
+
+                    <p id="resumenOperaciones">0</p>
+
+                </div>
+
+            </div>
+
+            <div class="filtros">
+
+                <input type="date" id="fechaInicio">
+
+                <input type="date" id="fechaFin">
+
+                <input
+                    type="text"
+                    id="buscarCliente"
+                    placeholder="Buscar cliente..."
+                >
+
+            </div>
+
+            <div class="filtros-botones">
+
+                <button onclick="buscarCliente()">
+
+                    👤 Cliente
+
+                </button>
+
+                <button onclick="filtrarHistorial()">
+
+                    🔎 Buscar
+
+                </button>
+
+                <button onclick="cargarHistorial()">
+
+                    🔄 Limpiar
+
+                </button>
+
+                <button onclick="exportarExcel()">
+
+                    📊 Exportar Excel
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Historial de operaciones</h2>
+
+            <table id="tablaHistorial">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Tipo</th>
+
+                        <th>Fecha</th>
+
+                        <th>Cliente</th>
+
+                        <th>Banco</th>
+
+                        <th>USDT</th>
+
+                        <th>Precio</th>
+
+                        <th>Total</th>
+
+                        <th>Acciones</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+    <script src="../js/storage.js"></script>
+
+    <script src="../js/historial.js"></script>
+<footer class="footer">
+
+    <p>
+
+        © 2026 Jhonder Capital S.A.C.
+
+    </p>
+
+    <span>
+
+        Plataforma interna de gestión USDT
+
+    </span>
+
+</footer>
+</body>
+
+</html>

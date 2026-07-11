@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Ventas - Jhonder Capital S.A.C.</title>
+
+    <link rel="stylesheet" href="../css/dashboard.css">
+
+</head>
+
+<body>
+
+    <div class="main">
+
+        <div class="hero">
+<div class="empresa-info">
+
+    <div>
+
+        <h3>Jhonder Capital S.A.C.</h3>
+
+        <p>Trading y gestión de USDT</p>
+
+    </div>
+
+    <div class="estado-online">
+
+        🟢 Sistema activo
+
+    </div>
+
+</div>
+            <h1>Registro de Ventas</h1>
+
+            <p>
+                Gestiona las ventas de USDT de Jhonder Capital S.A.C.
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Nueva venta</h2>
+
+            <form id="formVenta" autocomplete="off">
+
+                <label>Fecha</label>
+                <input type="date" id="fecha">
+
+                <label>Cliente</label>
+
+<input
+    type="text"
+    id="cliente"
+    list="listaClientes"
+    placeholder="Escribe o selecciona un cliente"
+>
+
+<datalist id="listaClientes"></datalist>
+                <label>Banco</label>
+
+                <select id="banco">
+                    <option>Interbank</option>
+                    <option>BBVA</option>
+                    <option>Plin</option>
+                    <option>Transferencia Interbancaria</option>
+                </select>
+
+                <label>Cantidad USDT</label>
+                <input type="number" id="cantidad" step="0.0001">
+
+                <label>Precio Venta</label>
+                <input type="number" id="precio" step="0.0001">
+
+                <label>Total Cobrado</label>
+                <input type="number" id="total" readonly>
+
+                <button type="submit">
+
+                    Guardar venta
+
+                </button>
+
+            </form>
+
+        </div>
+
+        <br>
+
+        <div class="card">
+
+            <h2>Ventas registradas</h2>
+
+            <table id="tablaVentas">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Fecha</th>
+
+                        <th>Cliente</th>
+
+                        <th>Banco</th>
+
+                        <th>USDT</th>
+
+                        <th>Precio venta</th>
+
+                        <th>Costo FIFO</th>
+
+                        <th>Ganancia</th>
+
+                        <th>Total cobrado</th>
+
+                        <th>Acciones</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <script src="../js/storage.js"></script>
+    <script src="../js/ventas.js"></script>
+<footer class="footer">
+
+    <p>
+
+        © 2026 Jhonder Capital S.A.C.
+
+    </p>
+
+    <span>
+
+        Plataforma interna de gestión USDT
+
+    </span>
+
+</footer>
+</body>
+
+</html>

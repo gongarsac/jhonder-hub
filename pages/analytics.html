@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Analytics - Jhonder Capital S.A.C.</title>
+
+    <link rel="stylesheet" href="../css/dashboard.css">
+
+</head>
+
+<body>
+
+    <div class="main">
+
+        <div class="hero">
+            <div class="empresa-info">
+
+    <div>
+
+        <h3>Jhonder Capital S.A.C.</h3>
+
+        <p>Trading y gestión de USDT</p>
+
+    </div>
+
+    <div class="estado-online">
+
+        🟢 Sistema activo
+
+    </div>
+
+</div>
+
+            <h1>Analytics</h1>
+
+            <p>
+
+                Estadísticas financieras y rendimiento
+                de Jhonder Capital S.A.C.
+
+            </p>
+
+        </div>
+
+        <div class="cards">
+
+            <div class="card">
+
+                <h3>Capital invertido</h3>
+
+                <h2 id="capitalAnalytics">
+
+                    S/ 0.00
+
+                </h2>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Ganancia total</h3>
+
+                <h2 id="gananciaAnalytics">
+
+                    S/ 0.00
+
+                </h2>
+
+            </div>
+
+            <div class="card">
+
+                <h3>USDT disponible</h3>
+
+                <h2 id="disponibleAnalytics">
+
+                    0 USDT
+
+                </h2>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Operaciones</h3>
+
+                <h2 id="operacionesAnalytics">
+
+                    0
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <br>
+
+        <div class="card">
+
+            <h2>Resumen financiero</h2>
+            <br>
+
+<div class="card">
+
+    <h2>Gráfica de operaciones</h2>
+
+    <br>
+
+    <canvas id="graficoOperaciones"></canvas>
+
+</div>
+
+<br>
+
+<div class="card">
+
+    <h2>Gráfica de ganancias</h2>
+
+    <br>
+
+    <canvas id="graficoGanancias"></canvas>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+            <br>
+
+            <table>
+
+                <tr>
+
+                    <th>Concepto</th>
+
+                    <th>Valor</th>
+
+                </tr>
+
+                <tr>
+
+                    <td>Total comprado</td>
+
+                    <td id="compradoAnalytics">
+
+                        0 USDT
+
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td>Total vendido</td>
+
+                    <td id="vendidoAnalytics">
+
+                        0 USDT
+
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td>Ganancia acumulada</td>
+
+                    <td id="gananciaTabla">
+
+                        S/ 0.00
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <script src="../js/storage.js"></script>
+
+    <script src="../js/analytics.js"></script>
+table {
+
+    box-shadow:
+
+        0 10px 25px rgba(0,0,0,.25);
+
+}
+
+th {
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+    font-size: 13px;
+
+}
+
+tr {
+
+    transition: .25s;
+
+}
+
+tr:hover {
+
+    transform: scale(1.01);
+
+}
+</body>
+
+</html>

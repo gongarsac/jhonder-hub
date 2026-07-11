@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Compras - Jhonder Capital S.A.C.</title>
+
+    <link rel="stylesheet" href="../css/dashboard.css">
+
+</head>
+
+<body>
+
+    <div class="main">
+
+        <div class="hero">
+            <div class="empresa-info">
+
+    <div>
+
+        <h3>Jhonder Capital S.A.C.</h3>
+
+        <p>Trading y gestión de USDT</p>
+
+    </div>
+
+    <div class="estado-online">
+
+        🟢 Sistema activo
+
+    </div>
+
+</div>
+
+            <h1>📈 Compras de USDT</h1>
+
+            <p>
+                Control y administración de compras mediante el método FIFO.
+            </p>
+
+        </div>
+
+        <!-- TARJETAS DE RESUMEN -->
+
+        <div class="cards">
+
+            <div class="card">
+
+                <h3>Total comprado</h3>
+
+                <h2 id="totalComprado">0 USDT</h2>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Capital invertido</h3>
+
+                <h2 id="capitalInvertido">S/ 0.00</h2>
+
+            </div>
+
+            <div class="card">
+
+                <th>Disponible</th>
+<th>Acciones</th>
+
+                <h2 id="usdtDisponible">0 USDT</h2>
+
+            </div>
+
+        </div>
+
+        <br>
+
+        <!-- FORMULARIO -->
+
+        <div class="card">
+
+            <h2>➕ Registrar nueva compra</h2>
+
+            <br>
+
+            <form id="formCompra" autocomplete="off">
+
+    <div class="grid-form">
+
+        <div>
+
+            <label>Fecha</label>
+
+            <input type="date" id="fecha">
+
+        </div>
+
+        <div>
+
+            <label>Cliente</label>
+
+<input
+    type="text"
+    id="cliente"
+    list="listaClientes"
+    placeholder="Escribe o selecciona un cliente"
+>
+
+<datalist id="listaClientes"></datalist>
+                
+            >
+
+        </div>
+
+        <div>
+
+            <label>Banco</label>
+
+            <select id="banco">
+
+                <option>Interbank</option>
+
+                <option>BBVA</option>
+
+                <option>Plin</option>
+
+                <option>Transferencia Interbancaria</option>
+
+            </select>
+
+        </div>
+
+        <div>
+
+            <label>Cantidad USDT</label>
+
+            <input
+                type="number"
+                id="cantidad"
+                step="0.0001"
+            >
+
+        </div>
+
+        <div>
+
+            <label>Precio compra</label>
+
+            <input
+                type="number"
+                id="precio"
+                step="0.0001"
+            >
+
+        </div>
+
+        <div>
+
+            <label>Total pagado</label>
+
+            <input
+                type="number"
+                id="total"
+                readonly
+            >
+
+        </div>
+
+    </div>
+
+    <button type="submit">
+
+        Guardar compra
+
+    </button>
+
+</form>
+
+        </div>
+
+        <br>
+
+        <!-- HISTORIAL -->
+
+        <div class="card">
+
+            <div class="titulo-tabla">
+
+                <h2>📋 Historial de compras</h2>
+
+                <input
+                    type="text"
+                    placeholder="Buscar cliente..."
+                >
+
+            </div>
+
+            <div class="tabla-responsive">
+
+                <table id="tablaCompras">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Fecha</th>
+
+                            <th>Cliente</th>
+
+                            <th>Banco</th>
+
+                            <th>USDT</th>
+
+                            <th>Precio</th>
+
+                            <th>Total</th>
+
+                            <th>Disponible</th>
+
+                            <th>Acciones</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="../js/storage.js"></script>
+
+    <script src="../js/compras.js"></script>
+<footer class="footer">
+
+    <p>
+
+        © 2026 Jhonder Capital S.A.C.
+
+    </p>
+
+    <span>
+
+        Plataforma interna de gestión USDT
+
+    </span>
+
+</footer>
+</body>
+
+</html>
