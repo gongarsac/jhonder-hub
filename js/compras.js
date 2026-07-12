@@ -1,4 +1,12 @@
-document.getElementById("formCompra").addEventListener("submit", function (e) {
+window.addEventListener("DOMContentLoaded", () => {
+
+const formulario = document.getElementById("formCompra");
+
+if (!formulario) {
+    return;
+}
+
+formulario.addEventListener("submit", function (e) {
 
     e.preventDefault();
 
@@ -281,4 +289,8 @@ cargarClientesSelect();
 cargarCompras();
 
 window.editarCompra = editarCompra;
-window.eliminarCompra = eliminarCompra;       
+window.eliminarCompra = eliminarCompra;
+
+console.log("compras.js cargado correctamente");
+
+});

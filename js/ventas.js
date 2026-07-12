@@ -1,5 +1,6 @@
-document.getElementById("formVenta").addEventListener("submit", function (e) {
+window.addEventListener("DOMContentLoaded", () => {
 
+document.getElementById("formVenta").addEventListener("submit", function (e) {
     e.preventDefault();
 
     const cantidadVenta = Number(
@@ -361,3 +362,4 @@ function cargarClientesSelect() {
 
 cargarClientesSelect();
 cargarVentas();
+});
