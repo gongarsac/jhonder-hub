@@ -278,4 +278,7 @@ function cargarClientesSelect() {
 }
 
 cargarClientesSelect();
-cargarCompras();         
+cargarCompras();
+
+window.editarCompra = editarCompra;
+window.eliminarCompra = eliminarCompra;       
