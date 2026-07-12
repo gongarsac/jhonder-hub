@@ -362,4 +362,6 @@ function cargarClientesSelect() {
 
 cargarClientesSelect();
 cargarVentas();
+window.editarVenta = editarVenta;
+window.eliminarVenta = eliminarVenta;
 });
