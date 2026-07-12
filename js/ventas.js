@@ -218,6 +218,8 @@ function eliminarVenta(id) {
 }
 
 function editarVenta(id) {
+    
+    console.log("Editar venta:", id);
 
     const operaciones = obtenerOperaciones();
 
@@ -362,6 +364,8 @@ function cargarClientesSelect() {
 
 cargarClientesSelect();
 cargarVentas();
+
 window.editarVenta = editarVenta;
 window.eliminarVenta = eliminarVenta;
+
 });
