@@ -32,7 +32,7 @@
 
     width: 420px;
 
-    min-width: 420px;
+    max-width: 420px;
 
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
 
@@ -76,6 +76,8 @@
     font-size: 14px;
 
     outline: none;
+
+    box-sizing: border-box;
 
 }
 
@@ -129,12 +131,21 @@ button:hover {
 }
 
 .historial-card {
+
     flex: 1;
+
     background: rgba(10, 20, 50, 0.85);
+
     padding: 40px;
+
     border-radius: 25px;
-    width: 900px;
+
+    max-width: 900px;
+
     min-height: 600px;
+
+    overflow-x: auto;
+
 }
 
 .titulo-tabla {
@@ -150,9 +161,13 @@ button:hover {
 }
 
 .tabla-gastos {
+
     width: 100%;
+
     border-collapse: collapse;
+
     min-width: 700px;
+
 }
 
 .tabla-gastos th {
@@ -176,66 +191,65 @@ button:hover {
     text-align: center;
 
 }
+
 @media screen and (max-width: 768px) {
 
     .contenido {
 
-        padding: 15px;
-
-        display: flex;
         flex-direction: column;
+
+        padding: 15px;
 
         gap: 20px;
 
     }
 
-    .card,
-    .historial-card {
+    .card {
 
         width: 100%;
 
-    }
+        max-width: 100%;
 
-    .grupo input,
-    .grupo textarea {
-
-        width: 100%;
+        padding: 20px;
 
         box-sizing: border-box;
 
     }
 
-    .tabla-gastos {
-
-        display: block;
-
-        overflow-x: auto;
-
-        white-space: nowrap;
-
-    }
-
-}
-@media screen and (max-width: 768px) {
-
-    .contenido {
-        padding: 15px;
-    }
-
-    .card,
     .historial-card {
+
         width: 100%;
+
+        max-width: 100%;
+
+        min-height: auto;
+
+        padding: 20px;
+
         box-sizing: border-box;
+
     }
 
-    .tabla-gastos {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
+    .contenido h1 {
 
-    .historial-card h2 {
-        font-size: 36px;
+        font-size: 32px;
+
         text-align: center;
+
+        white-space: normal;
+
     }
+
+    .titulo-tabla {
+
+        font-size: 32px;
+
+    }
+
+    .tabla-gastos {
+
+        min-width: 700px;
+
+    }
+
 }
