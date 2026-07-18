@@ -31,15 +31,48 @@ formulario.addEventListener("submit", function (e) {
         disponible: Number(document.getElementById("cantidad").value)
 
     };
-
+//console.log("DATOS ENVIADOS:", compra);
     agregarOperacion(compra);
+    
+fetch(
+    "https://script.google.com/macros/s/AKfycbzcHOHVuDROdxvb6KuuTTeCxarXRv6CaNu0p-JU2oByjiu_3ZYJJhDyKl-tLUmvoyUXTw/exec",
+    {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify(compra)
+    }
+)
+.then(() => {
 
-    cargarCompras();
+    console.log("DATOS ENVIADOS:");
 
-    alert("✅ Compra guardada correctamente");
+    console.log("Compra enviada a Google Sheets");
 
-    this.reset();
+})
+.catch(error => {
 
+    console.error(error);
+
+});
+
+cargarCompras();
+
+alert("✅ Compra guardada correctamente");
+
+this.reset();
+const hoy = new Date();
+
+hoy.setMinutes(
+    hoy.getMinutes() - hoy.getTimezoneOffset()
+);
+
+document.getElementById("fecha").value =
+    hoy.toISOString().split("T")[0];
+
+document.getElementById("fecha").value =
+    new Date()
+        .toISOString()
+        .split("T")[0];
 });
 
 document
@@ -294,3 +327,57 @@ window.eliminarCompra = eliminarCompra;
 console.log("compras.js cargado correctamente");
 
 });
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const hoy = new Date()
+
+            .toISOString()
+
+            .split("T")[0];
+
+        document.getElementById(
+            "fecha"
+        ).value = hoy;
+
+    }
+);
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    () => {
+
+        const hoy = new Date();
+
+hoy.setMinutes(
+    hoy.getMinutes() - hoy.getTimezoneOffset()
+);
+
+document.getElementById("fecha").value =
+    hoy.toISOString().split("T")[0];
+
+    }
+
+);
+const configuracion = JSON.parse(
+    localStorage.getItem(
+        "configuracion"
+    )
+);
+
+const nombreEmpresaCompras =
+    document.getElementById(
+        "nombreEmpresaCompras"
+    );
+
+if (
+    configuracion &&
+    nombreEmpresaCompras
+) {
+
+    nombreEmpresaCompras.textContent =
+        configuracion.empresa;
+
+}

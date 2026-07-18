@@ -2,7 +2,83 @@
 // JHONDER CAPITAL S.A.C. - STORAGE
 // =========================================
 
-// Obtener todas las operaciones
+const URL_API =
+    "https://script.google.com/macros/s/AKfycbzcHOHVuDROdxvb6KuuTTeCxarXRv6CaNu0p-JU2oByjiu_3ZYJJhDyKl-tLUmvoyUXTw/exec";
+
+
+// =========================================
+// OBTENER OPERACIONES DESDE GOOGLE SHEETS
+// =========================================
+
+async function obtenerOperacionesSheets() {
+
+    const respuesta = await fetch(URL_API);
+
+    const datos = await respuesta.json();
+
+    const compras = datos.compras.map(fila => ({
+
+        id: fila[0],
+        tipo: "Compra",
+        fecha: fila[1],
+        cliente: fila[2],
+        banco: fila[3],
+        cantidad: Number(fila[4]),
+        precio: Number(fila[5]),
+        total: Number(fila[6]),
+        disponible: Number(fila[7])
+
+    }));
+
+    const ventas = datos.ventas.map(fila => ({
+
+        id: fila[0],
+        tipo: "Venta",
+        fecha: fila[1],
+        cliente: fila[2],
+        banco: fila[3],
+        cantidad: Number(fila[4]),
+        precio: Number(fila[5]),
+        total: Number(fila[6]),
+        ganancia: Number(fila[7])
+
+    }));
+
+    const gastos = datos.gastos.map(fila => ({
+
+        tipo: "Gasto",
+        fecha: fila[0],
+        concepto: fila[1],
+        monto: Number(fila[2]),
+        observacion: fila[3]
+
+    }));
+
+   const operaciones = [
+
+    ...compras,
+    ...ventas,
+    ...gastos
+
+];
+
+localStorage.setItem(
+
+    "cacheOperaciones",
+
+    JSON.stringify(operaciones)
+
+);
+
+return operaciones;
+
+}
+
+
+// =========================================
+// LOCAL STORAGE
+// =========================================
+
 function obtenerOperaciones() {
 
     const datos = localStorage.getItem("operaciones");
@@ -14,19 +90,22 @@ function obtenerOperaciones() {
     }
 
     return [];
+
 }
 
-// Guardar operaciones
+
 function guardarOperaciones(operaciones) {
 
     localStorage.setItem(
+
         "operaciones",
         JSON.stringify(operaciones)
+
     );
 
 }
 
-// Agregar operación
+
 function agregarOperacion(operacion) {
 
     const operaciones = obtenerOperaciones();
@@ -37,14 +116,18 @@ function agregarOperacion(operacion) {
 
 }
 
-// Actualizar operaciones
+
 function actualizarOperaciones(operaciones) {
 
     guardarOperaciones(operaciones);
 
 }
 
-// Generar ID
+
+// =========================================
+// IDS
+// =========================================
+
 function generarId(prefijo) {
 
     let contador = localStorage.getItem(prefijo);
@@ -62,14 +145,20 @@ function generarId(prefijo) {
     localStorage.setItem(prefijo, contador);
 
     return (
+
         prefijo +
         "-" +
         String(contador).padStart(6, "0")
+
     );
 
 }
 
-// Eliminar operación
+
+// =========================================
+// ELIMINAR COMPRA
+// =========================================
+
 function eliminarCompra(id) {
 
     const confirmar = confirm(
@@ -94,7 +183,11 @@ function eliminarCompra(id) {
 
 }
 
+
+// =========================================
 // FIFO
+// =========================================
+
 function procesarFIFO(cantidadVenta) {
 
     const operaciones = obtenerOperaciones();
@@ -164,6 +257,7 @@ function procesarFIFO(cantidadVenta) {
         costoTotal,
 
         costoUnitario:
+
             costoTotal / cantidadVenta,
 
         lotesUsados

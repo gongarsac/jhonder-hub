@@ -46,6 +46,25 @@ lotesUsados: resultadoFIFO.lotesUsados
     };
 
     agregarOperacion(venta);
+    fetch(
+    "https://script.google.com/macros/s/AKfycbzcHOHVuDROdxvb6KuuTTeCxarXRv6CaNu0p-JU2oByjiu_3ZYJJhDyKl-tLUmvoyUXTw/exec",
+    {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify(venta)
+    }
+)
+.then(() => {
+
+    console.log("VENTA ENVIADA:");
+    console.log(JSON.stringify(venta));
+
+})
+.catch(error => {
+
+    console.error(error);
+
+});
 
     cargarVentas();
 
@@ -64,6 +83,14 @@ lotesUsados: resultadoFIFO.lotesUsados
     );
 
     this.reset();
+    const hoy = new Date();
+
+hoy.setMinutes(
+    hoy.getMinutes() - hoy.getTimezoneOffset()
+);
+
+document.getElementById("fecha").value =
+    hoy.toISOString().split("T")[0];
 
 });
 
@@ -369,3 +396,56 @@ window.editarVenta = editarVenta;
 window.eliminarVenta = eliminarVenta;
 
 });
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const hoy = new Date()
+
+            .toISOString()
+
+            .split("T")[0];
+
+        document.getElementById(
+            "fecha"
+        ).value = hoy;
+
+    }
+);
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    () => {
+
+        const hoy = new Date();
+
+hoy.setMinutes(
+    hoy.getMinutes() - hoy.getTimezoneOffset()
+);
+
+document.getElementById("fecha").value =
+    hoy.toISOString().split("T")[0];
+    }
+
+);
+const configuracion = JSON.parse(
+    localStorage.getItem(
+        "configuracion"
+    )
+);
+
+const nombreEmpresaVentas =
+    document.getElementById(
+        "nombreEmpresaVentas"
+    );
+
+if (
+    configuracion &&
+    nombreEmpresaVentas
+) {
+
+    nombreEmpresaVentas.textContent =
+        configuracion.empresa;
+
+}

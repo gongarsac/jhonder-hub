@@ -15,98 +15,58 @@
 
 <body>
 
-    <div class="main">
 
-        <div class="hero">
-
-            <h1>⚙️ Configuración</h1>
-
-            <p>
-
-                Administra tu sistema y protege la información.
-
-            </p>
-
-        </div>
-
-        <div class="card">
-
-            <h2>Respaldo de datos</h2>
-
-            <br>
-
-            <button onclick="exportarDatos()">
-
-                💾 Exportar respaldo
-
-            </button>
-
-            <br><br>
-
-            <input type="file" id="archivoBackup">
-
-            <br><br>
-
-            <button onclick="importarDatos()">
-
-                📂 Importar respaldo
-
-            </button>
-
-        </div>
-
-        <br>
-
-        <div class="card">
-
-            <h2>Peligro</h2>
-
-            <br>
-
-            <button onclick="borrarTodo()">
-
-                🗑️ Borrar todos los datos
-
-            </button>
-
-        </div>
-
-    </div>
-
-
-</<div class="main">
+<div class="main"></div>
 
     <div class="hero">
 
-        <h1>⚙️ Configuración</h1>
+    <h1>⚙️ Configuración</h1>
 
-        <p>
-            Administra la información del sistema.
+    <p>
+        Administra la información del sistema.
+    </p>
+
+    <div class="estado-sistema">
+
+        <p>🟢 Sistema activo</p>
+
+        <p id="fechaRespaldo">
+            Último respaldo: --
         </p>
 
     </div>
+
+</div>
 
     <div class="card">
 
         <h2>Empresa</h2>
 
-        <label>Nombre de la empresa</label>
+       <label>Nombre de la empresa</label>
 
-        <input
-            type="text"
-            id="empresa"
-            placeholder="Jhonder Capital S.A.C."
-        >
+<input
+    type="text"
+    id="empresa"
+    placeholder="Jhonder Capital S.A.C."
+>
 
-        <label>Moneda</label>
+<label>Moneda</label>   
 
-        <select id="moneda">
+<select id="moneda">
 
-            <option value="S/">Soles (S/)</option>
+    <option value="S/">Soles (S/)</option>
 
-            <option value="$">Dólares ($)</option>
+    <option value="$">Dólares ($)</option>
 
-        </select>
+</select>
+
+<label>Capital inicial</label>
+
+<input
+    type="number"
+    id="capitalInicial"
+    placeholder="10000"
+>
 
         <br><br>
 
@@ -115,32 +75,37 @@
             Guardar configuración
 
         </button>
+        <br><br>
+
+<button onclick="cerrarSesion()">
+
+    🚪 Cerrar sesión
+
+</button>
 
     </div>
 
     <br>
 
-    <div class="card">
-
-        <h2>Zona peligrosa</h2>
-        <br>
 
 <div class="card">
 
     <h2>Respaldo de datos</h2>
 
     <p>
-
         Exporta o importa todas las operaciones.
-
     </p>
 
     <br>
 
     <button onclick="exportarDatos()">
-
         📥 Exportar respaldo
+    </button>
 
+    <br><br>
+
+    <button onclick="generarReporteDiario()">
+        📊 Generar reporte diario
     </button>
 
     <br><br>
@@ -153,34 +118,38 @@
     <br><br>
 
     <button onclick="importarDatos()">
-
         📤 Importar respaldo
+    </button>
+
+</div>
+
+<br>
+
+<div class="card zona-peligro">
+
+    <h2>⚠️ Zona peligrosa</h2>
+
+    <p>
+        Esta acción eliminará todas las compras, ventas e historial.
+    </p>
+
+    <br>
+
+    <button
+        onclick="reiniciarSistema()"
+        class="btn-eliminar"
+    >
+
+        🗑️ Reiniciar sistema
 
     </button>
 
 </div>
 
-        <p>
-
-            Eliminar todas las compras, ventas e historial.
-
-        </p>
-
-        <br>
-
-        <button
-            onclick="reiniciarSistema()"
-            class="btn-eliminar"
-        >
-
-            🗑️ Reiniciar sistema
-
-        </button>
-
-    </div>
-
 </div>
 
-<script src="../js/config.js"></script>>
+<script src="../js/config.js"></script>
+
+</body>
 
 </html>

@@ -22,7 +22,11 @@
 
     <div>
 
-        <h3>Jhonder Capital S.A.C.</h3>
+        <h3 id="nombreEmpresaAnalytics">
+
+    Jhonder Capital S.A.C.
+
+</h3>
 
         <p>Trading y gestión de USDT</p>
 
@@ -47,70 +51,97 @@
 
         </div>
 
-        <div class="cards">
+        <div class="filtros-analytics">
 
-            <div class="card">
+    <button onclick="filtrarAnalytics('hoy')">
+        Hoy
+    </button>
 
-                <h3>Capital invertido</h3>
+    <button onclick="filtrarAnalytics('semana')">
+        Semana
+    </button>
 
-                <h2 id="capitalAnalytics">
+    <button onclick="filtrarAnalytics('mes')">
+        Mes
+    </button>
 
-                    S/ 0.00
+    <button onclick="filtrarAnalytics('todo')">
+        Todo
+    </button>
 
-                </h2>
+</div>
+        
+        <div class="analytics-cards">
 
-            </div>
 
-            <div class="card">
+    <div class="card">
 
-                <h3>Ganancia total</h3>
+        <h3>Capital actual</h3>
 
-                <h2 id="gananciaAnalytics">
+        <h2 id="capitalAnalytics">
 
-                    S/ 0.00
+            S/ 0.00
 
-                </h2>
+        </h2>
 
-            </div>
+    </div>
 
-            <div class="card">
+    <div class="card">
 
-                <h3>USDT disponible</h3>
+        <h3>Ganancia total</h3>
 
-                <h2 id="disponibleAnalytics">
+        <h2 id="gananciaAnalytics">
 
-                    0 USDT
+            S/ 0.00
 
-                </h2>
+        </h2>
 
-            </div>
+    </div>
+    <div class="card">
 
-            <div class="card">
+    <h3>Gastos acumulados</h3>
 
-                <h3>Operaciones</h3>
+    <h2 id="gastosAnalytics">
 
-                <h2 id="operacionesAnalytics">
+        S/ 0.00
 
-                    0
+    </h2>
 
-                </h2>
-
-            </div>
-
-        </div>
-
-        <br>
-
-        <div class="card">
-
-            <h2>Resumen financiero</h2>
-            <br>
+</div>
 
 <div class="card">
 
-    <h2>Gráfica de operaciones</h2>
+    <h3>Operaciones</h3>
 
-    <br>
+    <h2 id="operacionesAnalytics">
+
+        0
+
+    </h2>
+
+</div>
+
+    
+    <div class="card">
+
+        <h3>USDT disponibles</h3>
+
+        <h2 id="disponibleAnalytics">
+
+            0 USDT
+
+        </h2>
+
+    </div>
+
+</div>
+
+<br>
+
+<div class="card">
+
+    <h2>📊 Compras vs ventas</h2>
+
 
     <canvas id="graficoOperaciones"></canvas>
 
@@ -120,99 +151,23 @@
 
 <div class="card">
 
-    <h2>Gráfica de ganancias</h2>
-
-    <br>
+    <h2>📈 Evolución de ganancias</h2>
 
     <canvas id="graficoGanancias"></canvas>
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<br>
 
-            <br>
 
-            <table>
 
-                <tr>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../js/storage.js"></script>
+<script src="../js/analytics.js"></script>
 
-                    <th>Concepto</th>
+</body>
 
-                    <th>Valor</th>
-
-                </tr>
-
-                <tr>
-
-                    <td>Total comprado</td>
-
-                    <td id="compradoAnalytics">
-
-                        0 USDT
-
-                    </td>
-
-                </tr>
-
-                <tr>
-
-                    <td>Total vendido</td>
-
-                    <td id="vendidoAnalytics">
-
-                        0 USDT
-
-                    </td>
-
-                </tr>
-
-                <tr>
-
-                    <td>Ganancia acumulada</td>
-
-                    <td id="gananciaTabla">
-
-                        S/ 0.00
-
-                    </td>
-
-                </tr>
-
-            </table>
-
-        </div>
-
-    </div>
-
-    <table {
-
-    box-shadow:
-
-        0 10px 25px rgba(0,0,0,.25);
-
-}
-
-th {
-
-    text-transform: uppercase;
-
-    letter-spacing: 1px;
-
-    font-size: 13px;
-
-}
-
-tr {
-
-    transition: .25s;
-
-}
-
-tr:hover {
-
-    transform: scale(1.01);
-
-}
+</html>
 </body>
 
 </html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gastos</title>
+
+    <link rel="stylesheet" href="../css/dashboard.css">
+
+    <link rel="stylesheet" href="../css/gastos.css">
+
+</head>
+
+<body>
+
+    <div class="contenido">
+
+        <div class="card">
+
+            <h1>💸 Gestión de gastos</h1>
+
+            <div class="grupo">
+
+                <label>Concepto</label>
+
+                <input
+                    type="text"
+                    id="conceptoGasto"
+                    placeholder="Ejemplo: Comisión bancaria"
+                >
+
+            </div>
+
+            <div class="grupo">
+
+                <label>Monto</label>
+
+                <input
+                    type="number"
+                    id="montoGasto"
+                    placeholder="0.00"
+                >
+
+            </div>
+
+            <div class="grupo">
+
+                <label>Observación</label>
+
+                <textarea
+                    id="observacionGasto"
+                    placeholder="Detalle del gasto"
+                ></textarea>
+
+            </div>
+
+            <button onclick="guardarGasto()">
+
+                Guardar gasto
+
+            </button>
+
+        </div>
+
+        <div class="historial-card">
+
+            <h2 class="titulo-tabla">
+
+                Historial de gastos
+
+            </h2>
+
+            <table class="tabla-gastos">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Fecha</th>
+                        <th>Concepto</th>
+                        <th>Monto</th>
+                        <th>Observación</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="tablaGastos">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <script src="../js/gastos.js"></script>
+
+</body>
+
+</html>

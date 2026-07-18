@@ -83,37 +83,64 @@ function guardarConfiguracion() {
 
         empresa: document.getElementById("empresa").value,
 
-        moneda: document.getElementById("moneda").value
+        moneda: document.getElementById("moneda").value,
+
+        capitalInicial: Number(
+            document.getElementById(
+                "capitalInicial"
+            ).value
+        )
+        
 
     };
+    
 
     localStorage.setItem(
+
         "configuracion",
+
         JSON.stringify(configuracion)
+
+    );
+
+    localStorage.setItem(
+
+        "capitalInicial",
+
+        configuracion.capitalInicial
+
     );
 
     alert("✅ Configuración guardada");
 
 }
 
+
 function cargarConfiguracion() {
 
     const datos = JSON.parse(
 
-        localStorage.getItem("configuracion")
+        localStorage.getItem(
+            "configuracion"
+        )
 
     );
 
     if (!datos) return;
 
-    document.getElementById("empresa").value =
-        datos.empresa;
+    document.getElementById(
+        "empresa"
+    ).value = datos.empresa || "";
 
-    document.getElementById("moneda").value =
-        datos.moneda;
+    document.getElementById(
+        "moneda"
+    ).value = datos.moneda || "S/";
+
+    document.getElementById(
+        "capitalInicial"
+    ).value = datos.capitalInicial || 0;
 
 }
-
 function reiniciarSistema() {
 
     const confirmar = confirm(
@@ -203,5 +230,12 @@ function importarDatos() {
     };
 
     lector.readAsText(archivo);
+
+}
+function cerrarSesion() {
+
+    localStorage.removeItem("usuarioActivo");
+
+    window.location.href = "../index.html";
 
 }

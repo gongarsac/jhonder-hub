@@ -1,8 +1,12 @@
-document.getElementById("formCliente").addEventListener("submit", function (e) {
+const URL_API = "https://script.google.com/macros/s/AKfycbzcHOHVuDROdxvb6KuuTTeCxarXRv6CaNu0p-JU2oByjiu_3ZYJJhDyKl-tLUmvoyUXTw/exec";
+
+document.getElementById("formCliente").addEventListener("submit", async function (e) {
 
     e.preventDefault();
 
     const cliente = {
+
+        tipo: "Cliente",
 
         id: generarId("CL"),
 
@@ -16,11 +20,25 @@ document.getElementById("formCliente").addEventListener("submit", function (e) {
 
     };
 
+    // Guardar localmente
+
     const clientes = obtenerClientes();
 
     clientes.push(cliente);
 
     guardarClientes(clientes);
+
+    // Guardar en Google Sheets
+
+    fetch(URL_API, {
+
+        method: "POST",
+
+        mode: "no-cors",
+
+        body: JSON.stringify(cliente)
+
+    });
 
     cargarClientes();
 

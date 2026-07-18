@@ -1,36 +1,65 @@
-function cargarAnalytics() {
+async function cargarAnalytics() {
 
-    const operaciones = obtenerOperaciones();
+    const operaciones = await obtenerOperacionesSheets();
+ 
 
-    let capital = 0;
     let ganancia = 0;
-    let comprado = 0;
-    let vendido = 0;
-    let disponible = 0;
+let gastos = 0;
+let comprado = 0;
+let vendido = 0;
+let disponible = 0;
+let capitalActual = 0;
+    const capitalInicial = Number(
+    localStorage.getItem(
+        "capitalInicial"
+    )
+) || 0;
 
     operaciones.forEach(op => {
 
-        if (op.tipo === "Compra") {
+    if (op.tipo === "Compra") {
 
-            capital += Number(op.total);
-            comprado += Number(op.cantidad);
-            disponible += Number(op.disponible || 0);
+    comprado += Number(op.cantidad);
 
-        }
+}
 
-        if (op.tipo === "Venta") {
+if (op.tipo === "Venta") {
 
-            vendido += Number(op.cantidad);
-            ganancia += Number(op.ganancia || 0);
+    vendido += Number(op.cantidad);
 
-        }
+    ganancia += Number(op.ganancia || 0);
 
-    });
+}
+
+if (op.tipo === "Gasto") {
+
+    gastos += Number(op.monto || 0);
+
+}
+
+disponible = comprado - vendido;
+
+    if (op.tipo === "Venta") {
+
+        vendido += Number(op.cantidad);
+        ganancia += Number(op.ganancia || 0);
+
+    }
+
+    if (op.tipo === "Gasto") {
+
+        gastos += Number(op.monto || 0);
+
+    }
+
+});
+
+capitalActual = capitalInicial + ganancia - gastos;
 
     document.getElementById(
-        "capitalAnalytics"
-    ).textContent =
-        "S/ " + capital.toFixed(2);
+    "capitalAnalytics"
+).textContent =
+    "S/ " + capitalActual.toFixed(2);
 
     document.getElementById(
         "gananciaAnalytics"
@@ -41,32 +70,31 @@ function cargarAnalytics() {
         "disponibleAnalytics"
     ).textContent =
         disponible.toFixed(2) + " USDT";
+        document.getElementById(
+    "operacionesAnalytics"
+).textContent =
+    operaciones.length;
 
     document.getElementById(
-        "operacionesAnalytics"
-    ).textContent =
-        operaciones.length;
+    "gastosAnalytics"
+).textContent =
+    "S/ " + gastos.toFixed(2);
 
-    document.getElementById(
-        "compradoAnalytics"
-    ).textContent =
-        comprado.toFixed(2) + " USDT";
-
-    document.getElementById(
-        "vendidoAnalytics"
-    ).textContent =
-        vendido.toFixed(2) + " USDT";
-
-    document.getElementById(
-        "gananciaTabla"
-    ).textContent =
-        "S/ " + ganancia.toFixed(2);
-
+    
 }
 
 cargarAnalytics();
 
-const operaciones = obtenerOperaciones();
+const operaciones = JSON.parse(
+
+    localStorage.getItem(
+
+        "cacheOperaciones"
+
+    )
+
+) || [];
+console.log(operaciones);
 
 let totalCompras = 0;
 let totalVentas = 0;
@@ -197,3 +225,23 @@ new Chart(
     }
 
 );
+const configuracion = JSON.parse(
+    localStorage.getItem(
+        "configuracion"
+    )
+);
+
+const nombreEmpresaAnalytics =
+    document.getElementById(
+        "nombreEmpresaAnalytics"
+    );
+
+if (
+    configuracion &&
+    nombreEmpresaAnalytics
+) {
+
+    nombreEmpresaAnalytics.textContent =
+        configuracion.empresa;
+
+}

@@ -48,7 +48,7 @@
 
         <div class="card">
 
-            <h2>Filtros</h2>
+           <h2>Resumen del día</h2>
 
             <div class="resumen-historial">
 
@@ -86,75 +86,65 @@
 
             </div>
 
-            <div class="filtros">
-
-                <input type="date" id="fechaInicio">
-
-                <input type="date" id="fechaFin">
-
-                <input
-                    type="text"
-                    id="buscarCliente"
-                    placeholder="Buscar cliente..."
-                >
-
-            </div>
-
-            <div class="filtros-botones">
-
-                <button onclick="buscarCliente()">
-
-                    👤 Cliente
-
-                </button>
-
-                <button onclick="filtrarHistorial()">
-
-                    🔎 Buscar
-
-                </button>
-
-                <button onclick="cargarHistorial()">
-
-                    🔄 Limpiar
-
-                </button>
-
-                <button onclick="exportarExcel()">
-
-                    📊 Exportar Excel
-
-                </button>
-
-            </div>
-
-        </div>
-
+            
         <div class="card">
 
             <h2>Historial de operaciones</h2>
+            <br>
 
-            <table id="tablaHistorial">
+<br><br>
 
-                <thead>
+<button onclick="cerrarDia()" class="btn-cerrar-dia">
 
-                    <tr>
+    🔒 Cerrar día
 
-                        <th>Tipo</th>
+</button>
 
-                        <th>Fecha</th>
+<button onclick="reabrirDia()" class="btn-reabrir-dia">
 
-                        <th>Cliente</th>
+    ↩️ Reabrir último día
 
-                        <th>Banco</th>
+</button>
 
-                        <th>USDT</th>
+<div class="historial-organizado">
 
-                        <th>Precio</th>
+    <h2>📂 Historial empresarial</h2>
 
-                        <th>Total</th>
+    <div class="filtros-historial">
 
-                        <th>Acciones</th>
+        <select id="filtroAnio">
+
+            <option value="">Seleccionar año</option>
+
+        </select>
+
+        <select id="filtroMes">
+
+            <option value="">Seleccionar mes</option>
+
+        </select>
+
+        <select id="filtroSemana">
+
+            <option value="">Seleccionar semana</option>
+
+        </select>
+
+        <button onclick="verDiasGuardados()">
+
+            📅 Buscar historial
+
+        </button>
+        <div id="listaDiasCerrados"></div>
+        <div id="contenedorHistorial"></div>
+
+    </div>
+
+
+</div>
+
+<br><br>
+
 
                     </tr>
 
@@ -171,8 +161,11 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-   s
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+   
 <footer class="footer">
 
     <p>
@@ -188,6 +181,8 @@
     </span>
 
 </footer>
+<script src="../js/storage.js"></script>
+<script src="../js/historial.js"></script>
 </body>
 
 </html>

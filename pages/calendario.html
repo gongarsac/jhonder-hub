@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Calendario</title>
+
+    <link rel="stylesheet" href="../css/dashboard.css">
+
+</head>
+
+<body>
+
+    <div class="sidebar">
+
+        <div class="logo-empresa">
+
+            <h2>Jhonder Capital S.A.C.</h2>
+
+            <p>Trading & Finanzas</p>
+
+        </div>
+
+        <a href="dashboard.html">Dashboard</a>
+
+        <a href="compras.html">Compras</a>
+
+        <a href="ventas.html">Ventas</a>
+
+        <a href="historial.html">Historial</a>
+
+        <a class="activo" href="calendario.html">Calendario</a>
+
+        <a href="analytics.html">Analytics</a>
+
+        <a href="gastos.html">Gastos</a>
+
+        <a href="configuracion.html">Configuración</a>
+
+    </div>
+
+    <div class="main">
+
+        <div class="hero">
+
+            <h1>📅 Calendario empresarial</h1>
+
+            <p>
+
+                Consulta el historial diario de compras, ventas y ganancias.
+
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h2>📅 Calendario empresarial</h2>
+
+            <div class="filtros-historial">
+
+                <select id="filtroAnio">
+
+                    <option value="">
+
+                        Seleccionar año
+
+                    </option>
+
+                </select>
+
+                <select id="filtroMes">
+
+                    <option value="">
+
+                        Seleccionar mes
+
+                    </option>
+
+                </select>
+
+                <select id="filtroSemana">
+
+                    <option value="">
+
+                        Seleccionar semana
+
+                    </option>
+
+                </select>
+
+            </div>
+
+            <br>
+
+            <button onclick="verDiasGuardados()">
+
+                📅 Buscar historial
+
+            </button>
+
+            <br><br>
+
+            <div id="listaDiasCerrados"></div>
+
+            <div id="contenedorHistorial"></div>
+
+        </div>
+
+    </div>
+
+    <script src="../js/storage.js"></script>
+
+    <script src="../js/calendario.js"></script>
+
+</body>
+
+</html>

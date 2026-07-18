@@ -1,340 +1,680 @@
-function cargarHistorial(lista = null) {
+function verDiasGuardados() {
 
-    const operaciones = lista || obtenerOperaciones();
+    const historialDias = JSON.parse(
 
-    const tbody = document.querySelector(
-        "#tablaHistorial tbody"
+        localStorage.getItem("historialDias")
+
+    ) || [];
+
+    const anio = document.getElementById(
+        "filtroAnio"
+    ).value;
+
+    const mes = document.getElementById(
+        "filtroMes"
+    ).value;
+
+    let diasFiltrados = historialDias;
+
+    if (anio !== "") {
+
+        diasFiltrados = diasFiltrados.filter(
+
+            dia => dia.fecha.split("-")[0] === anio
+
+        );
+
+    }
+
+    if (mes !== "") {
+
+        diasFiltrados = diasFiltrados.filter(
+
+            dia => dia.fecha.split("-")[1] === mes
+
+        );
+
+    }
+
+    const contenedor = document.getElementById(
+
+        "listaDiasCerrados"
+
     );
 
-    tbody.innerHTML = "";
+    contenedor.innerHTML = "";
 
-    let compras = 0;
+    if (diasFiltrados.length === 0) {
 
-    let ventas = 0;
+        contenedor.innerHTML = `
 
-    let ganancia = 0;
+            <p>No hay días guardados.</p>
 
-    operaciones.forEach(op => {
+        `;
 
-        if (op.tipo === "Compra") {
+        return;
+    }
 
-            compras += op.cantidad;
+    diasFiltrados.forEach(dia => {
 
-        }
+        contenedor.innerHTML += `
 
-        if (op.tipo === "Venta") {
+            <div class="dia-cerrado"
+                 onclick="abrirDia('${dia.fecha}')">
 
-            ventas += op.cantidad;
+                <h3>📅 ${dia.fecha}</h3>
 
-            ganancia += op.ganancia || 0;
+                <p>Operaciones: ${dia.operaciones.length}</p>
 
-        }
+                <p>Ganancia: S/ ${Number(
+                    dia.ganancia || 0
+                ).toFixed(2)}</p>
 
-        tbody.innerHTML += `
+                <p>USDT vendidos:
+                    ${Number(
+                        dia.vendidos || 0
+                    ).toFixed(2)}
+                </p>
 
-<tr>
+            </div>
 
-    <td>${op.tipo}</td>
-
-    <td>${op.fecha}</td>
-
-    <td>${op.cliente}</td>
-
-    <td>${op.banco}</td>
-
-    <td>${op.cantidad.toFixed(2)}</td>
-
-    <td>S/ ${op.precio.toFixed(4)}</td>
-
-    <td>S/ ${op.total.toFixed(2)}</td>
-
-    <td class="acciones">
-
-        <button
-            class="btn-editar"
-            onclick="editarDesdeHistorial('${op.id}')"
-        >
-            ✏️
-        </button>
-
-        <button
-            class="btn-eliminar"
-            onclick="eliminarDesdeHistorial('${op.id}')"
-        >
-            🗑️
-        </button>
-
-    </td>
-
-</tr>
-`;
+        `;
 
     });
-
-    document.getElementById("resumenCompras").textContent =
-
-        compras.toFixed(2) + " USDT";
-
-    document.getElementById("resumenVentas").textContent =
-
-        ventas.toFixed(2) + " USDT";
-
-    document.getElementById("resumenGanancia").textContent =
-
-        "S/ " + ganancia.toFixed(2);
-
-    document.getElementById("resumenOperaciones").textContent =
-
-        operaciones.length;
-
-}
-
-function filtrarHistorial() {
-
-    const inicio = document.getElementById(
-        "fechaInicio"
-    ).value;
-
-    const fin = document.getElementById(
-        "fechaFin"
-    ).value;
-
-    const operaciones = obtenerOperaciones();
-
-    const filtradas = operaciones.filter(op => {
-
-        return op.fecha >= inicio &&
-               op.fecha <= fin;
-
-    });
-
-    cargarHistorial(filtradas);
-
-}
-
-function buscarCliente() {
-
-    const texto = document
-        .getElementById("buscarCliente")
-        .value
-        .toLowerCase();
-
-    const operaciones = obtenerOperaciones();
-
-    const filtradas = operaciones.filter(op => {
-
-        return op.cliente
-            .toLowerCase()
-            .includes(texto);
-
-    });
-
-    cargarHistorial(filtradas);
 
 }
 
 cargarHistorial();
-function exportarExcel() {
+
+
+
+function cerrarDia() {
 
     const operaciones = obtenerOperaciones();
 
-    const datos = operaciones.map(op => ({
+    if (operaciones.length === 0) {
 
-        Tipo: op.tipo,
-
-        Fecha: op.fecha,
-
-        Cliente: op.cliente,
-
-        Banco: op.banco,
-
-        USDT: op.cantidad,
-
-        Precio: op.precio,
-
-        Total: op.total,
-
-        Ganancia: op.ganancia || 0
-
-    }));
-
-    const hoja = XLSX.utils.json_to_sheet(datos);
-
-    const libro = XLSX.utils.book_new();
-
-    XLSX.utils.book_append_sheet(
-
-        libro,
-
-        hoja,
-
-        "Historial"
-
-    );
-
-    XLSX.writeFile(
-
-        libro,
-
-        "Historial_Jhonder_Capital.xlsx"
-
-    );
-
-}
-function eliminarDesdeHistorial(id) {
-    function editarDesdeHistorial(id) {
-
-    const operaciones = obtenerOperaciones();
-
-    const operacion = operaciones.find(
-        op => op.id === id
-    );
-
-    if (!operacion) {
-
-        alert("No se encontró la operación.");
+        alert(
+            "No hay operaciones para cerrar."
+        );
 
         return;
     }
 
-    localStorage.setItem( 
-        "operacionEditar",
-        JSON.stringify(operacion)
-    );
+    const historialDias = JSON.parse(
 
-    if (operacion.tipo === "Compra") {
+        localStorage.getItem(
+            "historialDias"
+        )
 
-        window.location.href =
-            "../pages/compras.html";
+    ) || [];
+  let hoy = new Date()
+    .toISOString()
+    .split("T")[0];
 
-    } else {
+const yaExiste = historialDias.find(
+    dia => dia.fecha === hoy
+);
 
-        window.location.href =
-            "../pages/ventas.html";
-
-    }
-
-}
-    function editarDesdeHistorial(id) {
-
-    const operaciones = obtenerOperaciones();
-
-    const operacion = operaciones.find(
-
-        op => op.id === id
-
-    );
-
-    if (!operacion) return;
-
-    localStorage.setItem(
-
-        "operacionEditar",
-
-        JSON.stringify(operacion)
-
-    );
-
-    if (operacion.tipo === "Compra") {
-
-        window.location.href =
-
-            "compras.html";
-
-    }
-
-    if (operacion.tipo === "Venta") {
-
-        window.location.href =
-
-            "ventas.html";
-
-    }
-
-}
+if (yaExiste) {
 
     const confirmar = confirm(
-        "¿Eliminar esta operación?"
+        "El día ya existe. ¿Quieres reemplazarlo?"
     );
 
     if (!confirmar) return;
 
-    let operaciones = obtenerOperaciones();
-
-    const operacion = operaciones.find(
-        op => op.id === id
+    historialDias.splice(
+        historialDias.indexOf(yaExiste),
+        1
     );
+}
 
-    if (!operacion) return;
+    
 
-    if (
-        operacion.tipo === "Venta" &&
-        operacion.lotesUsados
-    ) {
+    let gananciaDia = 0;
 
-        operacion.lotesUsados.forEach(lote => {
+let usdtVendidos = 0;
 
-            const compra = operaciones.find(
+operaciones.forEach(op => {
 
-                op => op.id === lote.idCompra
+    if (op.tipo === "Venta") {
 
-            );
+        gananciaDia += Number(
 
-            if (compra) {
+            op.ganancia || 0
 
-                compra.disponible += lote.cantidad;
+        );
 
-            }
+        usdtVendidos += Number(
 
-        });
+            op.cantidad || 0
+
+        );
 
     }
 
-    operaciones = operaciones.filter(
+});
 
-        op => op.id !== id
+   historialDias.push({
+
+    fecha: hoy,
+
+    operaciones: [...operaciones],
+
+    ganancia: gananciaDia,
+
+    vendidos: usdtVendidos
+
+});
+const comprasDia = operaciones
+    .filter(op => op.tipo === "Compra")
+    .reduce(
+        (total, op) => total + Number(op.cantidad || 0),
+        0
+    );
+
+const capitalActual = document
+    .getElementById("capitalActual")
+    ?.textContent
+    ?.replace("S/", "")
+    ?.trim() || "0";
+
+
+console.log({
+
+    compras: comprasDia,
+
+    ventas: usdtVendidos,
+
+    ganancia: gananciaDia,
+
+    capital: capitalActual
+
+});
+fetch(
+    "https://script.google.com/macros/s/AKfycbzcHOHVuDROdxvb6KuuTTeCxarXRv6CaNu0p-JU2oByjiu_3ZYJJhDyKl-tLUmvoyUXTw/exec",
+    {
+
+        method: "POST",
+
+        body: JSON.stringify({
+
+            tipo: "Calendario",
+
+            fecha: hoy,
+
+            compras: comprasDia,
+
+            ventas: usdtVendidos,
+
+            ganancia: gananciaDia,
+
+            capital: capitalActual
+
+        })
+
+    }
+)
+.catch(error => {
+
+    console.error(
+        "Error enviando calendario:",
+        error
+    );
+
+});
+
+    localStorage.setItem(
+
+        "historialDias",
+
+        JSON.stringify(
+
+            historialDias
+
+        )
 
     );
 
-    actualizarOperaciones(
-        operaciones
-    );
+    actualizarOperaciones([]);
 
     cargarHistorial();
+    cargarFiltrosHistorial();
 
     alert(
-        "✅ Operación eliminada correctamente."
+
+        "✅ Día cerrado correctamente."
+
     );
 
 }
-function editarDesdeHistorial(id) {
 
-    const operaciones = obtenerOperaciones();
+function verDiasGuardados() {
 
-    const operacion = operaciones.find(
-        op => op.id === id
+    const historialDias = JSON.parse(
+
+        localStorage.getItem("historialDias")
+
+    ) || [];
+
+    const contenedor = document.getElementById(
+
+        "listaDiasCerrados"
+
     );
 
-    if (!operacion) {
+    contenedor.innerHTML = "";
 
-        alert("No se encontró la operación");
+    if (historialDias.length === 0) {
+
+        contenedor.innerHTML = `
+
+            <p>No hay días cerrados.</p>
+
+        `;
 
         return;
+
     }
 
-    localStorage.setItem(
-        "operacionEditar",
-        JSON.stringify(operacion)
+    historialDias.forEach(dia => {
+
+    contenedor.innerHTML += `
+
+        <div
+    class="dia-cerrado"
+    onclick="abrirDia('${dia.fecha}')"
+>
+
+            <h3>📅 ${dia.fecha}</h3>
+
+            <p>
+
+                Operaciones:
+
+                ${dia.operaciones.length}
+
+            </p>
+
+            <p>
+
+                Ganancia:
+
+                S/ ${dia.ganancia.toFixed(2)}
+
+            </p>
+            <p>
+
+    USDT vendidos:
+
+    ${Number(dia.vendidos || 0).toFixed(2)}
+
+</p>
+
+        </div>
+
+    `;
+
+});
+
+}
+function cargarFiltrosHistorial() {
+
+    const historialDias = JSON.parse(
+        localStorage.getItem("historialDias")
+    ) || [];
+
+    const selectAnio = document.getElementById(
+        "filtroAnio"
     );
 
-    if (operacion.tipo === "Compra") {
+    const selectMes = document.getElementById(
+        "filtroMes"
+    );
 
-        window.location.href = "compras.html";
+    selectAnio.innerHTML = `
+        <option value="">
+            Seleccionar año
+        </option>
+    `;
 
-    } else {
+    selectMes.innerHTML = `
+        <option value="">
+            Seleccionar mes
+        </option>
+    `;
 
-        window.location.href = "ventas.html";
+    const anios = [
+
+        ...new Set(
+
+            historialDias.map(
+                dia => dia.fecha.split("-")[0]
+            )
+
+        )
+
+    ];
+
+    anios.forEach(anio => {
+
+        selectAnio.innerHTML += `
+
+            <option value="${anio}">
+
+                ${anio}
+
+            </option>
+
+        `;
+
+    });
+
+    selectAnio.addEventListener("change", () => {
+
+        const meses = [
+
+            ...new Set(
+
+                historialDias
+
+                    .filter(
+                        dia =>
+                            dia.fecha.split("-")[0] ===
+                            selectAnio.value
+                    )
+
+                    .map(
+                        dia => dia.fecha.split("-")[1]
+                    )
+
+            )
+
+        ];
+
+        selectMes.innerHTML = `
+            <option value="">
+                Seleccionar mes
+            </option>
+        `;
+
+        meses.forEach(mes => {
+
+            selectMes.innerHTML += `
+
+                <option value="${mes}">
+
+                    ${mes}
+
+                </option>
+
+            `;
+
+        });
+
+    });
+
+}
+
+function abrirDia(fecha) {
+
+    const historialDias = JSON.parse(
+
+        localStorage.getItem("historialDias")
+
+    ) || [];
+
+    const dia = historialDias.find(
+
+        item => item.fecha === fecha
+
+    );
+
+    if (!dia) {
+
+        alert(fecha);
+
+        return;
 
     }
+
+    cargarHistorial(
+
+        dia.operaciones
+
+    );
+
+}
+async function cargarHistorial(operaciones = null) {
+
+    let listaOperaciones = operaciones || await obtenerOperacionesSheets();
+    console.log(listaOperaciones);
+    const compras = listaOperaciones.filter(
+
+    op => op.tipo === "Compra"
+
+);
+
+const ventas = listaOperaciones.filter(
+
+    op => op.tipo === "Venta"
+
+);
+
+const totalCompras = compras.reduce(
+
+    (total, op) => total + Number(op.cantidad || 0),
+
+    0
+
+);
+
+const totalVentas = ventas.reduce(
+
+    (total, op) => total + Number(op.cantidad || 0),
+
+    0
+
+);
+
+const ganancia = ventas.reduce(
+
+    (total, op) => total + Number(op.ganancia || 0),
+
+    0
+
+);
+
+document.getElementById(
+
+    "resumenCompras"
+
+).textContent = totalCompras.toFixed(2) + " USDT";
+
+document.getElementById(
+
+    "resumenVentas"
+
+).textContent = totalVentas.toFixed(2) + " USDT";
+
+document.getElementById(
+
+    "resumenGanancia"
+
+).textContent = "S/ " + ganancia.toFixed(2);
+
+document.getElementById(
+
+    "resumenOperaciones"
+
+).textContent = listaOperaciones.length;
+
+    listaOperaciones = listaOperaciones.filter(
+
+        op => op.tipo !== "Gasto"
+
+    );
+
+    const contenedor = document.getElementById(
+
+        "contenedorHistorial"
+
+    );
+
+    if (!contenedor) {
+
+        return;
+
+    }
+
+    if (listaOperaciones.length === 0) {
+
+        contenedor.innerHTML = `
+
+            <p>No hay operaciones.</p>
+
+        `;
+
+        return;
+
+    }
+
+    contenedor.innerHTML = `
+
+        <div class="card historial-card">
+
+            <h2>📅 Operaciones</h2>
+
+            <table class="tabla-historial">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Tipo</th>
+
+                        <th>Cliente</th>
+
+                        <th>Banco</th>
+
+                        <th>USDT</th>
+
+                        <th>Total</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    ${listaOperaciones.map(op => `
+
+                        <tr>
+
+                            <td>${op.tipo}</td>
+
+                            <td>${op.cliente}</td>
+
+                            <td>${op.banco}</td>
+
+                            <td>${op.cantidad}</td>
+
+                            <td>S/ ${op.total}</td>
+
+                        </tr>
+
+                    `).join("")}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    `;
+}
+function mostrarTodo() {
+
+    cargarHistorial();
+
+}
+
+function mostrarCompras() {
+
+    const operaciones = obtenerOperaciones().filter(
+
+        op => op.tipo === "Compra"
+
+    );
+
+    cargarHistorial(operaciones);
+
+}
+
+function mostrarVentas() {
+
+    const operaciones = obtenerOperaciones().filter(
+
+        op => op.tipo === "Venta"
+
+    );
+
+    cargarHistorial(operaciones);
+
+}
+
+function reabrirDia() {
+
+    const historialDias = JSON.parse(
+
+        localStorage.getItem("historialDias")
+
+    ) || [];
+
+    if (historialDias.length === 0) {
+
+        alert(
+
+            "No hay días cerrados."
+
+        );
+
+        return;
+
+    }
+
+    const ultimoDia = historialDias[
+
+        historialDias.length - 1
+
+    ];
+
+    actualizarOperaciones(
+
+        ultimoDia.operaciones
+
+    );
+    historialDias.pop();
+
+localStorage.setItem(
+
+    "historialDias",
+
+    JSON.stringify(
+
+        historialDias
+
+    )
+
+);S
+
+    alert(
+
+        "✅ Día reabierto correctamente."
+
+    );
+
+    location.reload();
 
 }

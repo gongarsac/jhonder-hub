@@ -22,7 +22,12 @@
             JC
         </div>
 
-        <h2>Jhonder Capital S.A.C.</h2>
+       <h2 id="nombreEmpresaSidebar">
+
+    Jhonder Capital
+    S.A.C.
+
+</h2>
 
         <p>Trading & Finanzas</p>
 
@@ -44,9 +49,17 @@
         Historial
     </a>
 
+    <a href="calendario.html">
+    Calendario
+</a>
+
     <a href="analytics.html">
         Analytics
     </a>
+
+     <a href="gastos.html">
+    Gastos
+</a>
 
     <a href="configuracion.html">
         Configuración
@@ -58,7 +71,9 @@
 
 <div class="hero">
 
-    <h1>Jhonder Capital S.A.C.</h1>
+    <h1 id="nombreEmpresa">
+    Jhonder Capital S.A.C.
+</h1>
 
     <p>
         Plataforma profesional para la gestión de compras,
@@ -70,77 +85,109 @@
 <div class="cards">
 
 <div class="card">
-    <h3> Capital invertido</h3>
-    <h2 id="capital">S/ 0.00</h2>
+
+    <h3>Capital actual</h3>
+
+    <h2 id="capitalActual">S/ 0.00</h2>
+
 </div>
 
 <div class="card">
-    <h3> Ganancia total</h3>
-    <h2 id="ganancia">S/ 0.00</h2>
+
+    <h3>Fondos activos</h3>
+
+    <h2 id="fondosActivos">S/ 0.00</h2>
+
 </div>
 
 <div class="card">
-    <h3> Comprado</h3>
+   <h3>USDT comprados</h3>
     <h2 id="comprado">0 USDT</h2>
 </div>
 
 <div class="card">
-    <h3> Vendido</h3>
+    <h3>USDT vendidos</h3>
     <h2 id="vendido">0 USDT</h2>
 </div>
 
 <div class="card">
-    <h3> Disponible</h3>
+    <h3>USDT disponibles</h3>
     <h2 id="disponible">0 USDT</h2>
 </div>
 
 <div class="card">
-    <h3> USD/PEN</h3>
-    <h2 id="dolar">Cargando...</h2>
+    
 </div>
 
 </div>
 
-<h2 style="margin-top:40px;">📋 Últimas Operaciones</h2>
 
-<table>
+<div class="dashboard-paneles">
 
-<tr>
-    <th>Fecha</th>
-    <th>Cliente</th>
-    <th>Tipo</th>
-    <th>Banco</th>
-    <th>USDT</th>
-    <th>Total</th>
-</tr>
+    <div class="panel">
 
-<tr>
-    <td>10/07/2026</td>
-    <td>Ejemplo</td>
-    <td>Compra</td>
-    <td>Interbank</td>
-    <td>250</td>
-    <td>S/ 921.25</td>
-</tr>
-</table>
+        <h2>📈 Estado financiero</h2>
+
+        <div class="panel-info">
+
+            <div>
+                <span>Ganancia último cierre</span>
+                <h3 id="gananciaDia">S/ 0.00</h3>
+            </div>
+
+            <div>
+                <span>Operaciones del día</span>
+                <h3 id="operacionesDia">0</h3>
+            </div>
+
+            <div>
+                <span>Último cierre</span>
+                <h3 id="ultimoCierre">--</h3>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="panel">
+
+        <h2>📦 Inventario USDT</h2>
+
+        <div class="panel-info">
+
+            <div>
+                <span>Disponibles</span>
+                <h3 id="usdtInventario">0 USDT</h3>
+            </div>
+
+            <div>
+                <span>Bloques FIFO</span>
+                <h3 id="bloquesFifo">0</h3>
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
+</div>
 
-<script type="module" src="../js/dashboard.js"></script>
 <footer class="footer">
 
     <p>
-
         © 2026 Jhonder Capital S.A.C.
-
     </p>
 
     <span>
-
         Plataforma interna de gestión USDT
-
     </span>
 
 </footer>
+
+<script src="../js/auth.js"></script>
+<script src="../js/storage.js"></script>
+
+<script src="../js/dashboard.js"></script>
+
 </body>
 </html>
