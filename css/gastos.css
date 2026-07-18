@@ -176,3 +176,43 @@ button:hover {
     text-align: center;
 
 }
+@media screen and (max-width: 768px) {
+
+    .contenido {
+
+        padding: 15px;
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 20px;
+
+    }
+
+    .card,
+    .historial-card {
+
+        width: 100%;
+
+    }
+
+    .grupo input,
+    .grupo textarea {
+
+        width: 100%;
+
+        box-sizing: border-box;
+
+    }
+
+    .tabla-gastos {
+
+        display: block;
+
+        overflow-x: auto;
+
+        white-space: nowrap;
+
+    }
+
+}
