@@ -216,3 +216,26 @@ button:hover {
     }
 
 }
+@media screen and (max-width: 768px) {
+
+    .contenido {
+        padding: 15px;
+    }
+
+    .card,
+    .historial-card {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .tabla-gastos {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .historial-card h2 {
+        font-size: 36px;
+        text-align: center;
+    }
+}
