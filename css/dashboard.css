@@ -695,3 +695,83 @@ canvas {
     );
 
 }
+/* ========================= */
+/* RESPONSIVE PARA CELULAR */
+/* ========================= */
+
+@media screen and (max-width: 768px) {
+
+    body {
+
+        flex-direction: column;
+    }
+
+    .sidebar {
+
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 15px;
+    }
+
+    .sidebar a {
+
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .main {
+
+        width: 100%;
+        padding: 15px;
+    }
+
+    .hero {
+
+        padding: 20px;
+    }
+
+    .hero h1 {
+
+        font-size: 28px;
+    }
+
+    .cards {
+
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .dashboard-paneles {
+
+        grid-template-columns: 1fr;
+    }
+
+    .panel-info {
+
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .grid-form {
+
+        grid-template-columns: 1fr;
+    }
+
+    .tabla-responsive {
+
+        overflow-x: auto;
+    }
+
+    table {
+
+        min-width: 900px;
+    }
+
+    .footer {
+
+        text-align: center;
+        padding: 15px;
+    }
+
+}
