@@ -77,6 +77,10 @@ if (!operaciones) {
     disponible = comprado - vendido;
 
     capitalActual = capitalInicial + ganancia - gastos;
+    console.log("Capital inicial:", capitalInicial);
+console.log("Ganancia:", ganancia);
+console.log("Gastos:", gastos);
+console.log("Capital actual:", capitalActual);
 
     document.getElementById("fondosActivos").textContent =
         "S/ " + capital.toFixed(2);

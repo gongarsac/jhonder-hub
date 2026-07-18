@@ -1,10 +1,21 @@
-function verDiasGuardados() {
+async function verDiasGuardados() {
+  const respuesta = await fetch(URL_API);
 
-    const historialDias = JSON.parse(
+const datos = await respuesta.json();
 
-        localStorage.getItem("historialDias")
+const historialDias = datos.calendario.map(fila => ({
 
-    ) || [];
+    fecha: fila[0].split("T")[0],
+
+    comprado: Number(fila[1]),
+
+    vendido: Number(fila[2]),
+
+    ganancia: Number(fila[3]),
+
+    capital: Number(fila[4])
+
+}));
 
     const anio = document.getElementById(
         "filtroAnio"
@@ -64,17 +75,13 @@ function verDiasGuardados() {
 
                 <h3>📅 ${dia.fecha}</h3>
 
-                <p>Operaciones: ${dia.operaciones.length}</p>
+                <p>Comprados: ${dia.comprado} USDT</p>
 
-                <p>Ganancia: S/ ${Number(
-                    dia.ganancia || 0
-                ).toFixed(2)}</p>
+<p>Vendidos: ${dia.vendido} USDT</p>
 
-                <p>USDT vendidos:
-                    ${Number(
-                        dia.vendidos || 0
-                    ).toFixed(2)}
-                </p>
+<p>Ganancia: S/ ${dia.ganancia.toFixed(2)}</p>
+
+<p>Capital: S/ ${dia.capital.toFixed(2)}</p>
 
             </div>
 
@@ -83,36 +90,37 @@ function verDiasGuardados() {
     });
 
 }
-function cargarFiltrosHistorial() {
+async function cargarFiltrosHistorial() {
 
-    const historialDias = JSON.parse(
+    const respuesta = await fetch(URL_API);
 
-        localStorage.getItem("historialDias")
+    const datos = await respuesta.json();
 
-    ) || [];
+    const historialDias = datos.calendario.map(fila => ({
 
-    const selectAnio = document.getElementById(
-        "filtroAnio"
-    );
+       fecha: fila[0].split("T")[0],
 
-    const selectMes = document.getElementById(
-        "filtroMes"
-    );
+        comprado: Number(fila[1]),
+
+        vendido: Number(fila[2]),
+
+        ganancia: Number(fila[3]),
+
+        capital: Number(fila[4])
+
+    }));
+    console.log(historialDias);
+
+    const selectAnio = document.getElementById("filtroAnio");
+
+    const selectMes = document.getElementById("filtroMes");
 
     selectAnio.innerHTML = `
-
-        <option value="">
-            Seleccionar año
-        </option>
-
+        <option value="">Seleccionar año</option>
     `;
 
     selectMes.innerHTML = `
-
-        <option value="">
-            Seleccionar mes
-        </option>
-
+        <option value="">Seleccionar mes</option>
     `;
 
     const anios = [
@@ -128,13 +136,17 @@ function cargarFiltrosHistorial() {
         )
 
     ];
+    console.log(historialDias);
+console.log(anios);
 
     anios.forEach(anio => {
 
         selectAnio.innerHTML += `
 
             <option value="${anio}">
+
                 ${anio}
+
             </option>
 
         `;
@@ -145,9 +157,7 @@ function cargarFiltrosHistorial() {
 
         selectMes.innerHTML = `
 
-            <option value="">
-                Seleccionar mes
-            </option>
+            <option value="">Seleccionar mes</option>
 
         `;
 
@@ -182,7 +192,9 @@ function cargarFiltrosHistorial() {
             selectMes.innerHTML += `
 
                 <option value="${mes}">
+
                     ${mes}
+
                 </option>
 
             `;
@@ -193,55 +205,135 @@ function cargarFiltrosHistorial() {
 
 }
 
-cargarFiltrosHistorial();
+window.onload = async function () {
 
-verDiasGuardados();
-function abrirDia(fecha) {
+    await cargarFiltrosHistorial();
 
-    const historialDias = JSON.parse(
-        localStorage.getItem("historialDias")
-    ) || [];
+    await verDiasGuardados();
 
-    const dia = historialDias.find(
-        item => item.fecha === fecha
+};
+async function abrirDia(fecha) {
+
+    const respuesta = await fetch(URL_API);
+
+    const datos = await respuesta.json();
+
+    const compras = datos.compras.filter(
+
+        compra => compra[1].split("T")[0] === fecha
+
     );
 
-    if (!dia) {
-        return;
-    }
+    const ventas = datos.ventas.filter(
+
+        venta => venta[1].split("T")[0] === fecha
+
+    );
 
     const contenedor = document.getElementById(
+
         "contenedorHistorial"
+
     );
 
     contenedor.innerHTML = `
+
         <div class="card">
+
             <h2>📅 Operaciones del ${fecha}</h2>
+
+            <h3>🟢 Compras</h3>
 
             <table class="tabla-historial">
 
                 <thead>
 
                     <tr>
-                        <th>Tipo</th>
+
                         <th>Cliente</th>
+
                         <th>Banco</th>
+
                         <th>USDT</th>
+
+                        <th>Precio</th>
+
                         <th>Total</th>
+
                     </tr>
 
                 </thead>
 
                 <tbody>
 
-                    ${dia.operaciones.map(op => `
+                    ${compras.map(compra => `
+
                         <tr>
-                            <td>${op.tipo}</td>
-                            <td>${op.cliente}</td>
-                            <td>${op.banco}</td>
-                            <td>${op.cantidad}</td>
-                            <td>S/ ${op.total}</td>
+
+                            <td>${compra[2]}</td>
+
+                            <td>${compra[3]}</td>
+
+                            <td>${compra[4]}</td>
+
+                            <td>S/ ${compra[5]}</td>
+
+                            <td>S/ ${compra[6]}</td>
+
                         </tr>
+
+                    `).join("")}
+
+                </tbody>
+
+            </table>
+
+            <br>
+
+            <h3>🔴 Ventas</h3>
+
+            <table class="tabla-historial">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Cliente</th>
+
+                        <th>Banco</th>
+
+                        <th>USDT</th>
+
+                        <th>Precio</th>
+
+                        <th>Total</th>
+
+                        <th>Ganancia</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    ${ventas.map(venta => `
+
+                        <tr>
+
+                            <td>${venta[2]}</td>
+
+                            <td>${venta[3]}</td>
+
+                            <td>${venta[4]}</td>
+
+                            <td>S/ ${venta[5]}</td>
+
+                            <td>S/ ${venta[6]}</td>
+
+                            <td>S/ ${venta[7]}</td>
+
+                        </tr>
+
                     `).join("")}
 
                 </tbody>
@@ -249,5 +341,6 @@ function abrirDia(fecha) {
             </table>
 
         </div>
+
     `;
 }
