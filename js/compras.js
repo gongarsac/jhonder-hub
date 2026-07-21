@@ -16,7 +16,7 @@ formulario.addEventListener("submit", function (e) {
 
         tipo: "Compra",
 
-        fecha: document.getElementById("fechaVenta").value,
+        fecha: document.getElementById("fechaCompra").value,
 
         cliente: document.getElementById("cliente").value,
 
