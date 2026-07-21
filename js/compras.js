@@ -66,10 +66,10 @@ hoy.setMinutes(
     hoy.getMinutes() - hoy.getTimezoneOffset()
 );
 
-document.getElementById("fecha").value =
+document.getElementById("fechaCompra").value =
     hoy.toISOString().split("T")[0];
 
-document.getElementById("fecha").value =
+document.getElementById("fechaCompra").value=
     new Date()
         .toISOString()
         .split("T")[0];
@@ -217,8 +217,8 @@ if (
     operacionEditar.tipo === "Compra"
 ) {
 
-    document.getElementById("fecha").value =
-        operacionEditar.fecha;
+   document.getElementById("fechaCompra").value =
+    operacionEditar.fecha;
 
     document.getElementById("cliente").value =
         operacionEditar.cliente;
@@ -334,7 +334,7 @@ hoy.setMinutes(
     hoy.getMinutes() - hoy.getTimezoneOffset()
 );
 
-document.getElementById("fecha").value =
+document.getElementById("fechaCompra").value =
     hoy.toISOString().split("T")[0];
 
     }
