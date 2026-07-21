@@ -59,7 +59,7 @@ console.log("Resultado FIFO:", resultadoFIFO);
 
     tipo: editandoId ? "EditarVenta" : "Venta",
 
-    fecha: document.getElementById("fecha").value,
+    fecha: document.getElementById("fechaVenta").value,
 
     cliente: document.getElementById("cliente").value,
 
@@ -130,7 +130,7 @@ hoy.setMinutes(
     hoy.getMinutes() - hoy.getTimezoneOffset()
 );
 
-document.getElementById("fecha").value =
+document.getElementById("fechaVenta").value =
     hoy.toISOString().split("T")[0];
 
 });
@@ -335,7 +335,7 @@ if (
 
 ) {
 
-    document.getElementById("fecha").value =
+    document.getElementById("fechaVenta").value
 
         operacionEditar.fecha;
 
