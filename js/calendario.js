@@ -17,9 +17,7 @@ const historialDias = datos.calendario.map(fila => ({
 
 }));
 
-    const anio = document.getElementById(
-        "filtroAnio"
-    ).value;
+    
 
     const mes = document.getElementById(
         "filtroMes"
@@ -27,16 +25,7 @@ const historialDias = datos.calendario.map(fila => ({
 
     let diasFiltrados = historialDias;
 
-    if (anio !== "") {
-
-        diasFiltrados = diasFiltrados.filter(
-
-            dia => dia.fecha.split("-")[0] === anio
-
-        );
-
-    }
-
+   
     if (mes !== "") {
 
         diasFiltrados = diasFiltrados.filter(
@@ -111,105 +100,44 @@ async function cargarFiltrosHistorial() {
     }));
     console.log(historialDias);
 
-    const selectAnio = document.getElementById("filtroAnio");
 
     const selectMes = document.getElementById("filtroMes");
 
-    selectAnio.innerHTML = `
-        <option value="">Seleccionar año</option>
-    `;
+    const meses = [
 
-    selectMes.innerHTML = `
-        <option value="">Seleccionar mes</option>
-    `;
+    ...new Set(
 
-    const anios = [
+        historialDias.map(
 
-        ...new Set(
-
-            historialDias.map(
-
-                dia => dia.fecha.split("-")[0]
-
-            )
+            dia => dia.fecha.split("-")[1]
 
         )
 
-    ];
-    console.log(historialDias);
-console.log(anios);
+    )
 
-    anios.forEach(anio => {
+];
 
-        selectAnio.innerHTML += `
+selectMes.innerHTML = `
+    <option value="">Seleccionar mes</option>
+`;
 
-            <option value="${anio}">
+meses.forEach(mes => {
 
-                ${anio}
+    selectMes.innerHTML += `
 
-            </option>
+        <option value="${mes}">
+            ${mes}
+        </option>
 
-        `;
+    `;
 
-    });
-
-    selectAnio.addEventListener("change", () => {
-
-        selectMes.innerHTML = `
-
-            <option value="">Seleccionar mes</option>
-
-        `;
-
-        const meses = [
-
-            ...new Set(
-
-                historialDias
-
-                    .filter(
-
-                        dia =>
-
-                            dia.fecha.split("-")[0] ===
-
-                            selectAnio.value
-
-                    )
-
-                    .map(
-
-                        dia => dia.fecha.split("-")[1]
-
-                    )
-
-            )
-
-        ];
-
-        meses.forEach(mes => {
-
-            selectMes.innerHTML += `
-
-                <option value="${mes}">
-
-                    ${mes}
-
-                </option>
-
-            `;
-
-        });
-
-    });
+});
 
 }
 
 window.onload = async function () {
 
     await cargarFiltrosHistorial();
-
-    await verDiasGuardados();
 
 };
 async function abrirDia(fecha) {
@@ -231,9 +159,7 @@ async function abrirDia(fecha) {
     );
 
     const contenedor = document.getElementById(
-
-        "contenedorHistorial"
-
+    "detalleDia"
     );
 
     contenedor.innerHTML = `
@@ -330,7 +256,9 @@ async function abrirDia(fecha) {
 
                             <td>S/ ${venta[6]}</td>
 
-                            <td>S/ ${venta[7]}</td>
+                            <td class="ganancia-verde">
+                               S/ ${Number(venta[7]).toFixed(2)}
+                               </td>
 
                         </tr>
 

@@ -450,16 +450,25 @@ canvas {
 }
 .analytics-cards {
 
-    display: grid;
+    display: flex;
 
-    grid-template-columns: repeat(
-        auto-fit,
-        minmax(220px, 1fr)
-    );
+    flex-direction: column;
 
-    gap: 20px;
+    gap: 25px;
 
-    margin-top: 20px;
+}
+.analytics-cards .card:nth-child(2),
+.analytics-cards .card:nth-child(3) {
+
+    width: 100%;
+
+}
+
+.analytics-cards .card:nth-child(4),
+.analytics-cards .card:nth-child(5),
+.analytics-cards .card:nth-child(6) {
+
+    grid-column: span 1;
 
 }
 #listaDiasCerrados {
@@ -737,10 +746,19 @@ canvas {
     }
 
     .cards {
+        min-height: 120px;
+display: flex;
+flex-direction: column;
+justify-content: center;
 
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 25px;
+
+    margin-bottom: 30px;
+}
 
     .dashboard-paneles {
 
@@ -773,5 +791,79 @@ canvas {
         text-align: center;
         padding: 15px;
     }
+
+}
+.grafico-card {
+    padding: 25px;
+    margin-top: 25px;
+    min-height: 420px;
+}
+
+.grafico-card canvas {
+    width: 100% !important;
+    height: 320px !important;
+}
+.grafico-card {
+    width: 100%;
+    padding: 30px;
+    background: #0f1f4d;
+    border-radius: 20px;
+}
+
+.grafico-card canvas {
+    width: 100% !important;
+    height: 400px !important;
+}
+.grafico-card {
+
+    height: 500px;
+
+    padding: 30px;
+}
+
+.contenedor-grafico {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 400px;
+}
+
+.contenedor-grafico canvas {
+
+    width: 100% !important;
+
+    height: 100% !important;
+}
+.hero-analytics {
+
+    min-height: 220px;
+
+    padding: 40px;
+
+}
+
+.hero-analytics h1 {
+
+    font-size: 56px;
+
+}
+
+.hero-analytics p {
+
+    margin-top: 15px;
+
+    font-size: 24px;
+
+}
+
+.analytics-cards .card {
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
 
 }

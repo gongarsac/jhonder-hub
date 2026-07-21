@@ -1,13 +1,49 @@
 window.addEventListener("DOMContentLoaded", () => {
 
-document.getElementById("formVenta").addEventListener("submit", function (e) {
+    
+
+    const fechaInput = document.getElementById("fechaVenta");
+
+    if (fechaInput) {
+
+        const hoy = new Date();
+
+        const fechaLocal = hoy.getFullYear() + "-" +
+            String(hoy.getMonth() + 1).padStart(2, "0") + "-" +
+            String(hoy.getDate()).padStart(2, "0");
+
+        fechaInput.value = fechaLocal;
+    }
+
+});
+document.getElementById("formVenta").addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const cantidadVenta = Number(
         document.getElementById("cantidad").value
     );
 
-    const resultadoFIFO = procesarFIFO(cantidadVenta);
+    let resultadoFIFO;
+
+if (editandoId) {
+
+    resultadoFIFO = {
+        costoTotal: operacionEditar.costoFIFO,
+        lotesUsados: operacionEditar.lotesUsados || []
+    };
+
+} else {
+
+    resultadoFIFO = await procesarFIFO(cantidadVenta);
+
+    if (!resultadoFIFO) {
+        return;
+    }
+
+}
+    console.log("Editando:", editandoId);
+console.log("Cantidad:", cantidadVenta);
+console.log("Resultado FIFO:", resultadoFIFO);
 
     if (!resultadoFIFO) {
         return;
@@ -19,33 +55,33 @@ document.getElementById("formVenta").addEventListener("submit", function (e) {
 
     const venta = {
 
-        id: generarId("VT"),
+    id: editandoId || generarId("VT"),
 
-        tipo: "Venta",
+    tipo: editandoId ? "EditarVenta" : "Venta",
 
-        fecha: document.getElementById("fecha").value,
+    fecha: document.getElementById("fecha").value,
 
-        cliente: document.getElementById("cliente").value,
+    cliente: document.getElementById("cliente").value,
 
-        banco: document.getElementById("banco").value,
+    banco: document.getElementById("banco").value,
 
-        cantidad: cantidadVenta,
+    cantidad: cantidadVenta,
 
-        precio: Number(
-            document.getElementById("precio").value
-        ),
+    precio: Number(
+        document.getElementById("precio").value
+    ),
 
-        total: totalVenta,
+    costoFIFO: resultadoFIFO.costoTotal,
 
-        costoFIFO: resultadoFIFO.costoTotal,
+    total: totalVenta,
 
-        ganancia: totalVenta - resultadoFIFO.costoTotal,
+    ganancia: totalVenta - resultadoFIFO.costoTotal,
 
-lotesUsados: resultadoFIFO.lotesUsados
+    lotesUsados: resultadoFIFO.lotesUsados
 
-    };
+};
 
-    agregarOperacion(venta);
+    //agregarOperacion(venta);
     fetch(
     "https://script.google.com/macros/s/AKfycbzcHOHVuDROdxvb6KuuTTeCxarXRv6CaNu0p-JU2oByjiu_3ZYJJhDyKl-tLUmvoyUXTw/exec",
     {
@@ -57,7 +93,9 @@ lotesUsados: resultadoFIFO.lotesUsados
 .then(() => {
 
     console.log("VENTA ENVIADA:");
-    console.log(JSON.stringify(venta));
+console.log(JSON.stringify(venta));
+
+cargarVentas();
 
 })
 .catch(error => {
@@ -81,6 +119,9 @@ lotesUsados: resultadoFIFO.lotesUsados
         venta.ganancia.toFixed(2)
 
     );
+    localStorage.removeItem("operacionEditar");
+
+editandoId = null;
 
     this.reset();
     const hoy = new Date();
@@ -117,9 +158,9 @@ function calcularTotal() {
 
 }
 
-function cargarVentas() {
+async function cargarVentas() {
 
-    const operaciones = obtenerOperaciones();
+    const operaciones = await obtenerOperacionesSheets();
 
     const tbody = document.querySelector(
         "#tablaVentas tbody"
@@ -143,7 +184,7 @@ function cargarVentas() {
 
                 <td>${op.cantidad.toFixed(2)}</td>
 
-                <td>S/ ${op.precio.toFixed(4)}</td>
+                <td>S/ ${op.precio.toFixed(3)}</td>
 
                 <td>S/ ${op.costoFIFO.toFixed(2)}</td>
 
@@ -157,25 +198,16 @@ function cargarVentas() {
 
                 <td class="acciones">
 
-                    <button
-                        class="btn-editar"
-                        onclick="editarVenta('${op.id}')"
-                    >
+    <button
+        class="btn-eliminar"
+        onclick="eliminarVenta('${op.id}')"
+    >
+        🗑️
+    </button>
 
-                        ✏️
+</td>
 
-                    </button>
-
-                    <button
-                        class="btn-eliminar"
-                        onclick="eliminarVenta('${op.id}')"
-                    >
-
-                        🗑️
-
-                    </button>
-
-                </td>
+                 </td>
 
             </tr>
 
@@ -186,22 +218,20 @@ function cargarVentas() {
 
 }
 
-function eliminarVenta(id) {
+async function eliminarVenta(id) {
+
+    console.log("ELIMINANDO:", id);
 
     const confirmar = confirm(
-
         "¿Deseas eliminar esta venta?"
-
     );
 
     if (!confirmar) return;
 
-    let operaciones = obtenerOperaciones();
+    let operaciones = await obtenerOperacionesSheets();
 
     const venta = operaciones.find(
-
         op => op.id === id
-
     );
 
     if (!venta) return;
@@ -211,9 +241,7 @@ function eliminarVenta(id) {
         venta.lotesUsados.forEach(lote => {
 
             const compra = operaciones.find(
-
                 op => op.id === lote.idCompra
-
             );
 
             if (compra) {
@@ -227,106 +255,79 @@ function eliminarVenta(id) {
     }
 
     operaciones = operaciones.filter(
-
         op => op.id !== id
-
     );
+
+fetch(
+    "https://script.google.com/macros/s/AKfycbzcHOHVuDROdxvb6KuuTTeCxarXRv6CaNu0p-JU2oByjiu_3ZYJJhDyKl-tLUmvoyUXTw/exec",
+    {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify({
+
+            tipo: "EliminarVenta",
+
+            id: venta.id,
+
+            fecha: venta.fecha,
+
+            cliente: venta.cliente
+
+        })
+    }
+);
 
     actualizarOperaciones(operaciones);
 
     cargarVentas();
 
     alert(
-
         "✅ Venta eliminada y USDT recuperados."
-
     );
 
 }
 
-function editarVenta(id) {
-    
-    console.log("Editar venta:", id);
 
-    const operaciones = obtenerOperaciones();
+async function editarVenta(id) {
+
+    const operaciones = await obtenerOperacionesSheets();
 
     const venta = operaciones.find(
-
         op => op.id === id
-
     );
+    console.log("Venta encontrada:", venta);
+console.log("Lotes usados:", venta?.lotesUsados);
 
     if (!venta) return;
 
-    if (venta.lotesUsados) {
-
-        venta.lotesUsados.forEach(lote => {
-
-            const compra = operaciones.find(
-
-                op => op.id === lote.idCompra
-
-            );
-
-            if (compra) {
-
-                compra.disponible += lote.cantidad;
-
-            }
-
-        });
-
-    }
-
-    document.getElementById("fecha").value =
-
-        venta.fecha;
-
-    document.getElementById("cliente").value =
-
-        venta.cliente;
-
-    document.getElementById("banco").value =
-
-        venta.banco;
-
-    document.getElementById("cantidad").value =
-
-        venta.cantidad;
-
-    document.getElementById("precio").value =
-
-        venta.precio;
-
-    document.getElementById("total").value =
-
-        venta.total;
-
     const nuevasOperaciones = operaciones.filter(
-
         op => op.id !== id
-
     );
 
-    actualizarOperaciones(
+    actualizarOperaciones(nuevasOperaciones);
 
-        nuevasOperaciones
-
+    localStorage.setItem(
+        "operacionEditar",
+        JSON.stringify(venta)
     );
 
-    cargarVentas();
-
-    alert(
-
-        "✏️ Venta cargada para editar."
-
-    );
-
+    window.location.reload();
 }
 const operacionEditar = JSON.parse(
     localStorage.getItem("operacionEditar")
 );
+let editandoId = null;
 
+if (
+
+    operacionEditar &&
+    operacionEditar.tipo === "Venta"
+
+) {
+
+    editandoId = operacionEditar.id;
+
+}
 if (
 
     operacionEditar &&
@@ -358,11 +359,6 @@ if (
 
         operacionEditar.total;
 
-    localStorage.removeItem(
-
-        "operacionEditar"
-
-    );
 
 }
 function cargarClientesSelect() {
@@ -395,40 +391,8 @@ cargarVentas();
 window.editarVenta = editarVenta;
 window.eliminarVenta = eliminarVenta;
 
-});
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
 
-        const hoy = new Date()
 
-            .toISOString()
-
-            .split("T")[0];
-
-        document.getElementById(
-            "fecha"
-        ).value = hoy;
-
-    }
-);
-document.addEventListener(
-
-    "DOMContentLoaded",
-
-    () => {
-
-        const hoy = new Date();
-
-hoy.setMinutes(
-    hoy.getMinutes() - hoy.getTimezoneOffset()
-);
-
-document.getElementById("fecha").value =
-    hoy.toISOString().split("T")[0];
-    }
-
-);
 const configuracion = JSON.parse(
     localStorage.getItem(
         "configuracion"

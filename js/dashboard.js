@@ -11,21 +11,22 @@ async function obtenerCapitalInicial() {
 
 async function cargarDashboard() {
 
-    let operaciones = JSON.parse(
-
-    localStorage.getItem(
-
-        "cacheOperaciones"
-
-    )
-
+    let cache = JSON.parse(
+    localStorage.getItem("cacheOperaciones")
 );
+
+let operaciones = cache?.operaciones;
 
 if (!operaciones) {
 
     operaciones = await obtenerOperacionesSheets();
 
 }
+console.log(
+
+    "Datos sincronizados desde Sheets"
+
+);
 
     let capital = 0;
     let ganancia = 0;
@@ -37,6 +38,7 @@ if (!operaciones) {
     let comprado = 0;
     let vendido = 0;
     let disponible = 0;
+    let gananciaTotal = 0;
 
     operaciones.forEach(op => {
 
@@ -58,14 +60,15 @@ if (!operaciones) {
 
         }
 
-        if (op.tipo === "Venta") {
+       if (op.tipo === "Venta") {
 
-            vendido += Number(op.cantidad);
+    vendido += Number(op.cantidad);
 
-            ganancia += Number(op.ganancia || 0);
+    ganancia += Number(op.ganancia || 0);
 
-        }
+    gananciaTotal += Number(op.ganancia || 0);
 
+}
         if (op.tipo === "Gasto") {
 
             gastos += Number(op.monto || 0);
@@ -100,6 +103,7 @@ console.log("Capital actual:", capitalActual);
         document.getElementById("usdtInventario").textContent =
     disponible.toFixed(2) + " USDT";
 
+    
 const bloques = operaciones.filter(op =>
     op.tipo === "Compra" &&
     Number(op.disponible || 0) > 0
@@ -107,26 +111,16 @@ const bloques = operaciones.filter(op =>
 
 document.getElementById("bloquesFifo").textContent =
     bloques;
-    const historialDias = JSON.parse(
-    localStorage.getItem("historialDias")
-) || [];
-
-if (historialDias.length > 0) {
-
-    const ultimoDia =
-        historialDias[historialDias.length - 1];
-
     document.getElementById("gananciaDia").textContent =
-        "S/ " + Number(
-            ultimoDia.ganancia || 0
-        ).toFixed(2);
+    "S/ " + gananciaTotal.toFixed(2);
 
-    document.getElementById("operacionesDia").textContent =
-        ultimoDia.operaciones.length;
-
-    document.getElementById("ultimoCierre").textContent =
-        ultimoDia.fecha;
-}
+document.getElementById("operacionesDia").textContent =
+    operaciones.filter(
+        op =>
+            op.tipo === "Compra" ||
+            op.tipo === "Venta"
+    ).length;
+   
 }
 
 let capitalActual = 0;

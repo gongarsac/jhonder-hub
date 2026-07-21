@@ -1,56 +1,49 @@
-function obtenerLotesDisponibles() {
+async function cargarFIFO() {
 
-    const operaciones = obtenerOperaciones();
+    let cache = JSON.parse(
+    localStorage.getItem("cacheOperaciones")
+);
 
-    return operaciones.filter(op =>
-        op.tipo === "Compra" &&
-        Number(op.disponible) > 0
-    );
+let operaciones = cache?.operaciones;
 
-}
+    if (!operaciones) {
 
-function consumirFIFO(cantidadVenta) {
-
-    let lotes = obtenerLotesDisponibles();
-
-    let restante = cantidadVenta;
-
-    let usados = [];
-
-    for (let lote of lotes) {
-
-        if (restante <= 0) break;
-
-        let disponible = Number(lote.disponible);
-
-        let usar = Math.min(disponible, restante);
-
-        usados.push({
-            id: lote.id,
-            cantidad: usar,
-            precio: lote.precio
-        });
-
-        lote.disponible = disponible - usar;
-
-        restante -= usar;
+        operaciones = await obtenerOperacionesSheets();
 
     }
 
-    let operaciones = obtenerOperaciones();
+    const tbody = document.querySelector(
+        "#tablaFifo tbody"
+    );
 
-    lotes.forEach(lote => {
+    tbody.innerHTML = "";
 
-        let indice = operaciones.findIndex(op => op.id === lote.id);
+    const comprasActivas = operaciones.filter(op =>
 
-        if (indice !== -1) {
-            operaciones[indice] = lote;
-        }
+        op.tipo === "Compra" &&
+        Number(op.disponible || 0) > 0
+
+    );
+
+    comprasActivas.forEach(compra => {
+
+        tbody.innerHTML += `
+
+            <tr>
+
+                <td>${compra.id}</td>
+                <td>${compra.fecha}</td>
+                <td>${compra.banco}</td>
+                <td>S/ ${Number(compra.precio).toFixed(2)}</td>
+                <td>${Number(compra.cantidad).toFixed(2)} USDT</td>
+                <td>${Number(compra.disponible).toFixed(2)} USDT</td>
+
+            </tr>
+
+        `;
 
     });
 
-    actualizarOperaciones(operaciones);
-
-    return usados;
-
 }
+
+cargarFIFO();

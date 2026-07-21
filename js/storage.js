@@ -16,11 +16,13 @@ async function obtenerOperacionesSheets() {
 
     const datos = await respuesta.json();
 
+    console.log(datos);
+
     const compras = datos.compras.map(fila => ({
 
         id: fila[0],
         tipo: "Compra",
-        fecha: fila[1],
+        fecha: fila[1].split("T")[0],
         cliente: fila[2],
         banco: fila[3],
         cantidad: Number(fila[4]),
@@ -32,27 +34,28 @@ async function obtenerOperacionesSheets() {
 
     const ventas = datos.ventas.map(fila => ({
 
-        id: fila[0],
-        tipo: "Venta",
-        fecha: fila[1],
-        cliente: fila[2],
-        banco: fila[3],
-        cantidad: Number(fila[4]),
-        precio: Number(fila[5]),
-        total: Number(fila[6]),
-        ganancia: Number(fila[7])
+    id: fila[0],
+    tipo: "Venta",
+    fecha: fila[1].split("T")[0],
+    cliente: fila[2],
+    banco: fila[3],
+    cantidad: Number(fila[4]),
+    precio: Number(fila[5]),
+    costoFIFO: Number(fila[6]),
+    total: Number(fila[7]),
+    ganancia: Number(fila[8])
 
-    }));
+}));
 
-    const gastos = datos.gastos.map(fila => ({
-
+    const gastos = datos.gastos
+    ? datos.gastos.map(fila => ({
         tipo: "Gasto",
         fecha: fila[0],
         concepto: fila[1],
         monto: Number(fila[2]),
         observacion: fila[3]
-
-    }));
+    }))
+    : [];
 
    const operaciones = [
 
@@ -62,13 +65,19 @@ async function obtenerOperacionesSheets() {
 
 ];
 
+const cache = {
+
+    operaciones,
+    actualizado: Date.now()
+
+};
 localStorage.setItem(
 
     "cacheOperaciones",
 
-    JSON.stringify(operaciones)
-
+    JSON.stringify(cache)
 );
+
 
 return operaciones;
 
@@ -81,53 +90,50 @@ return operaciones;
 
 function obtenerOperaciones() {
 
-    const datos = localStorage.getItem("operaciones");
+    const cache = JSON.parse(
 
-    if (datos) {
-
-        return JSON.parse(datos);
-
-    }
-
-    return [];
-
-}
-
-
-function guardarOperaciones(operaciones) {
-
-    localStorage.setItem(
-
-        "operaciones",
-        JSON.stringify(operaciones)
+        localStorage.getItem("cacheOperaciones")
 
     );
 
+    return cache?.operaciones || [];
+
 }
 
+function guardarOperaciones(operaciones) {
+
+    const cache = {
+
+        operaciones,
+        actualizado: Date.now()
+
+    };
+
+    localStorage.setItem(
+
+        "cacheOperaciones",
+
+        JSON.stringify(cache)
+
+    );
+}
 
 function agregarOperacion(operacion) {
-
     const operaciones = obtenerOperaciones();
 
     operaciones.push(operacion);
 
     guardarOperaciones(operaciones);
-
 }
 
-
 function actualizarOperaciones(operaciones) {
-
     guardarOperaciones(operaciones);
-
 }
 
 
 // =========================================
 // IDS
 // =========================================
-
 function generarId(prefijo) {
 
     let contador = localStorage.getItem(prefijo);
@@ -188,9 +194,9 @@ function eliminarCompra(id) {
 // FIFO
 // =========================================
 
-function procesarFIFO(cantidadVenta) {
+ async function procesarFIFO(cantidadVenta) {
 
-    const operaciones = obtenerOperaciones();
+    const operaciones = await obtenerOperacionesSheets();
 
     let restante = cantidadVenta;
 
@@ -218,11 +224,13 @@ function procesarFIFO(cantidadVenta) {
 
             lotesUsados.push({
 
-                idCompra: operacion.id,
+    idCompra: operacion.id,
 
-                cantidad: usar
+    cantidad: usar,
 
-            });
+    nuevoDisponible: operacion.disponible - usar
+
+});
 
             operacion.disponible -= usar;
 

@@ -1,191 +1,244 @@
 async function cargarAnalytics() {
 
-    const operaciones = await obtenerOperacionesSheets();
- 
+   let cache = JSON.parse(
+    localStorage.getItem("cacheOperaciones")
+);
+
+let operaciones = cache?.operaciones;
+
+    if (!operaciones) {
+        operaciones = await obtenerOperacionesSheets();
+    }
 
     let ganancia = 0;
-let gastos = 0;
-let comprado = 0;
-let vendido = 0;
-let disponible = 0;
-let capitalActual = 0;
-    const capitalInicial = Number(
-    localStorage.getItem(
-        "capitalInicial"
-    )
-) || 0;
+    let invertido = 0;
+
+    const clientes = new Set();
 
     operaciones.forEach(op => {
 
-    if (op.tipo === "Compra") {
+        if (op.tipo === "Compra") {
 
-    comprado += Number(op.cantidad);
+            invertido += Number(op.total || 0);
+
+        }
+
+        if (op.tipo === "Venta") {
+
+            ganancia += Number(op.ganancia || 0);
+
+        }
+
+        if (op.cliente) {
+
+            clientes.add(op.cliente);
+
+        }
+
+    });
+
+    document.getElementById("gananciaTotal").textContent =
+        "S/ " + ganancia.toFixed(2);
+
+    document.getElementById("capitalInvertido").textContent =
+        "S/ " + invertido.toFixed(2);
+
+    document.getElementById("totalOperaciones").textContent =
+        operaciones.length;
+
+    document.getElementById("clientesUnicos").textContent =
+        clientes.size;
 
 }
 
-if (op.tipo === "Venta") {
+cargarAnalytics();
+    async function crearGraficoComprasVentas() {
 
-    vendido += Number(op.cantidad);
+        let cache = JSON.parse(
+    localStorage.getItem("cacheOperaciones")
+);
 
-    ganancia += Number(op.ganancia || 0);
+let operaciones = cache?.operaciones || [];
 
+if (operaciones.length === 0) {
+    operaciones = await obtenerOperacionesSheets();
 }
 
-if (op.tipo === "Gasto") {
+        if (!operaciones) {
 
-    gastos += Number(op.monto || 0);
+            operaciones = await obtenerOperacionesSheets();
 
-}
+        }
 
-disponible = comprado - vendido;
+        let compras = 0;
+    let ventas = 0;
+    let ganancia = 0;
+    let invertido = 0;
+    let disponible = 0;
 
-    if (op.tipo === "Venta") {
+        operaciones.forEach(op => {
 
-        vendido += Number(op.cantidad);
+            if (op.tipo === "Compra") {
+
+                compras += Number(op.total || 0);
+                invertido += Number(op.total || 0);
+                disponible += Number(op.disponible || 0);
+
+            }
+
+            if (op.tipo === "Venta") {
+
+        ventas += Number(op.total || 0);
+
         ganancia += Number(op.ganancia || 0);
 
     }
 
-    if (op.tipo === "Gasto") {
+        });
+        
 
-        gastos += Number(op.monto || 0);
-
-    }
-
-});
-
-capitalActual = capitalInicial + ganancia - gastos;
-
-    document.getElementById(
-    "capitalAnalytics"
-).textContent =
-    "S/ " + capitalActual.toFixed(2);
-
-    document.getElementById(
-        "gananciaAnalytics"
-    ).textContent =
-        "S/ " + ganancia.toFixed(2);
-
-    document.getElementById(
-        "disponibleAnalytics"
-    ).textContent =
-        disponible.toFixed(2) + " USDT";
-        document.getElementById(
-    "operacionesAnalytics"
-).textContent =
-    operaciones.length;
-
-    document.getElementById(
-    "gastosAnalytics"
-).textContent =
-    "S/ " + gastos.toFixed(2);
-
-    
-}
-
-cargarAnalytics();
-
-const operaciones = JSON.parse(
-
-    localStorage.getItem(
-
-        "cacheOperaciones"
-
-    )
-
-) || [];
-console.log(operaciones);
-
-let totalCompras = 0;
-let totalVentas = 0;
-let gananciaTotal = 0;
-
-const fechas = [];
-const gananciasPorVenta = [];
-
-operaciones.forEach(op => {
-
-    if (op.tipo === "Compra") {
-
-        totalCompras += Number(op.total);
-
-    }
-
-    if (op.tipo === "Venta") {
-
-        totalVentas += Number(op.total);
-
-        gananciaTotal += Number(
-            op.ganancia || 0
+        const ctx = document.getElementById(
+            "graficoOperaciones"
         );
 
-        fechas.push(op.fecha);
+        new Chart(ctx, {
 
-        gananciasPorVenta.push(
-            Number(op.ganancia || 0)
-        );
+            type: "bar",
 
-    }
+            data: {
 
-});
+                labels: [
 
-new Chart(
+        "Capital invertido",
+        "Ganancia",
 
-    document.getElementById(
-        "graficoOperaciones"
-    ),
+    ],
 
-    {
+                datasets: [{
 
-        type: "doughnut",
+                    label: "Monto (S/)",
 
-        data: {
+                data: [
 
-            labels: [
+        invertido,
+        ganancia,
+        
 
-                "Compras",
+    ],
 
-                "Ventas"
+                    borderWidth: 1
 
-            ],
+                }]
 
-            datasets: [
+            },
 
-                {
+            options: {
+    responsive: true,
+    maintainAspectRatio: false,
 
-                    data: [
+                plugins: {
 
-                        totalCompras,
+                    legend: {
 
-                        totalVentas
+                        labels: {
 
-                    ],
+                            color: "white"
 
-                    backgroundColor: [
+                        }
 
-                        "#2563eb",
+                    }
 
-                        "#22c55e"
+                },
 
-                    ]
+                scales: {
+
+                    y: {
+
+                        ticks: {
+
+                            color: "white"
+
+                        }
+
+                    },
+
+                    x: {
+
+                        ticks: {
+
+                            color: "white"
+
+                        }
+
+                    }
 
                 }
 
-            ]
+            }
 
-        }
+        });
 
     }
 
+crearGraficoComprasVentas();
+
+async function crearGraficoGanancias() {
+
+    let cache = JSON.parse(
+    localStorage.getItem("cacheOperaciones")
 );
 
-new Chart(
+let operaciones = cache?.operaciones || [];
 
-    document.getElementById(
+if (operaciones.length === 0) {
+    operaciones = await obtenerOperacionesSheets();
+}
+
+    if (!operaciones) {
+
+        operaciones = await obtenerOperacionesSheets();
+
+    }
+
+    let capitalInicial = 100000;
+
+    let capitalActual = capitalInicial;
+
+    let fechas = [];
+
+    let capitales = [];
+
+    operaciones.sort((a, b) => {
+
+        return new Date(a.fecha) - new Date(b.fecha);
+
+    });
+
+    operaciones.forEach(op => {
+
+        if (op.tipo === "Venta") {
+
+            capitalActual += Number(op.ganancia || 0);
+
+        }
+
+        if (op.tipo === "Gasto") {
+
+            capitalActual -= Number(op.monto || 0);
+
+        }
+
+        fechas.push(op.fecha);
+
+        capitales.push(capitalActual);
+
+    });
+
+    const ctx = document.getElementById(
         "graficoGanancias"
-    ),
+    );
 
-    {
+    new Chart(ctx, {
 
         type: "line",
 
@@ -193,55 +246,67 @@ new Chart(
 
             labels: fechas,
 
-            datasets: [
+            datasets: [{
 
-                {
+                label: "Capital total",
 
-                    label: "Ganancias",
+                data: capitales,
 
-                    data: gananciasPorVenta,
+                tension: 0.3,
 
-                    borderColor: "#22c55e",
+                borderWidth: 3
 
-                    backgroundColor:
-                        "rgba(34,197,94,0.2)",
-
-                    fill: true,
-
-                    tension: 0.4
-
-                }
-
-            ]
+            }]
 
         },
 
         options: {
 
-            responsive: true
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+
+                    labels: {
+
+                        color: "white"
+
+                    }
+
+                }
+
+            },
+
+            scales: {
+
+                y: {
+
+                    ticks: {
+
+                        color: "white"
+
+                    }
+
+                },
+
+                x: {
+
+                    ticks: {
+
+                        color: "white"
+
+                    }
+
+                }
+
+            }
 
         }
 
-    }
-
-);
-const configuracion = JSON.parse(
-    localStorage.getItem(
-        "configuracion"
-    )
-);
-
-const nombreEmpresaAnalytics =
-    document.getElementById(
-        "nombreEmpresaAnalytics"
-    );
-
-if (
-    configuracion &&
-    nombreEmpresaAnalytics
-) {
-
-    nombreEmpresaAnalytics.textContent =
-        configuracion.empresa;
+    });
 
 }
+crearGraficoGanancias();

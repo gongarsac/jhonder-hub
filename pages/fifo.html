@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Auditoría FIFO</title>
+
+    <link rel="stylesheet" href="../css/dashboard.css">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <div class="logo-empresa">
+
+        <div class="logo-circulo">
+            JC
+        </div>
+
+        <h2>
+            Jhonder Capital S.A.C.
+        </h2>
+
+        <p>Trading & Finanzas</p>
+
+    </div>
+
+    <a href="dashboard.html">
+        Dashboard
+    </a>
+
+    <a href="compras.html">
+        Compras
+    </a>
+
+    <a href="ventas.html">
+        Ventas
+    </a>
+
+    <a href="historial.html">
+        Historial
+    </a>
+
+    <a class="activo" href="fifo.html">
+        FIFO
+    </a>
+
+    <a href="analytics.html">
+        Analytics
+    </a>
+
+    <a href="configuracion.html">
+        Configuración
+    </a>
+
+</div>
+
+<div class="main">
+
+    <div class="hero">
+
+        <h1>📦 Auditoría FIFO</h1>
+
+        <p>
+            Compras que todavía tienen USDT disponibles.
+        </p>
+
+    </div>
+
+    <div class="panel">
+
+        <table id="tablaFifo">
+
+            <thead>
+
+                <tr>
+
+                    <th>ID Compra</th>
+                    <th>Fecha</th>
+                    <th>Banco</th>
+                    <th>Precio</th>
+                    <th>Comprado</th>
+                    <th>Disponible</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script src="../js/storage.js"></script>
+<script src="../js/fifo.js"></script>
+
+</body>
+
+</html>

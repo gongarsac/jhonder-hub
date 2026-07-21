@@ -5,7 +5,7 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Analytics - Jhonder Capital S.A.C.</title>
 
@@ -15,159 +15,202 @@
 
 <body>
 
-    <div class="main">
+    <div class="sidebar">
 
-        <div class="hero">
-            <div class="empresa-info">
+        <div class="logo-empresa">
 
-    <div>
+            <div class="logo-circulo">
+                JC
+            </div>
 
-        <h3 id="nombreEmpresaAnalytics">
+            <h2>
 
-    Jhonder Capital S.A.C.
+                Jhonder Capital
+                S.A.C.
 
-</h3>
-
-        <p>Trading y gestión de USDT</p>
-
-    </div>
-
-    <div class="estado-online">
-
-        🟢 Sistema activo
-
-    </div>
-
-</div>
-
-            <h1>Analytics</h1>
+            </h2>
 
             <p>
 
-                Estadísticas financieras y rendimiento
-                de Jhonder Capital S.A.C.
+                Trading & Finanzas
 
             </p>
 
         </div>
 
-        <div class="filtros-analytics">
+        <a href="dashboard.html">
 
-    <button onclick="filtrarAnalytics('hoy')">
-        Hoy
-    </button>
+            Dashboard
 
-    <button onclick="filtrarAnalytics('semana')">
-        Semana
-    </button>
+        </a>
 
-    <button onclick="filtrarAnalytics('mes')">
-        Mes
-    </button>
+        <a href="compras.html">
 
-    <button onclick="filtrarAnalytics('todo')">
-        Todo
-    </button>
+            Compras
 
-</div>
-        
-        <div class="analytics-cards">
+        </a>
 
+        <a href="ventas.html">
 
-    <div class="card">
+            Ventas
 
-        <h3>Capital actual</h3>
+        </a>
 
-        <h2 id="capitalAnalytics">
+        <a href="historial.html">
 
-            S/ 0.00
+            Historial
 
-        </h2>
+        </a>
 
-    </div>
+        <a href="fifo.html">
 
-    <div class="card">
+            FIFO
 
-        <h3>Ganancia total</h3>
+        </a>
 
-        <h2 id="gananciaAnalytics">
+        <a class="activo" href="analytics.html">
 
-            S/ 0.00
+            Analytics
 
-        </h2>
+        </a>
 
-    </div>
-    <div class="card">
+        <a href="configuracion.html">
 
-    <h3>Gastos acumulados</h3>
+            Configuración
 
-    <h2 id="gastosAnalytics">
-
-        S/ 0.00
-
-    </h2>
-
-</div>
-
-<div class="card">
-
-    <h3>Operaciones</h3>
-
-    <h2 id="operacionesAnalytics">
-
-        0
-
-    </h2>
-
-</div>
-
-    
-    <div class="card">
-
-        <h3>USDT disponibles</h3>
-
-        <h2 id="disponibleAnalytics">
-
-            0 USDT
-
-        </h2>
+        </a>
 
     </div>
 
+    <div class="main">
+
+        <!-- CABECERA -->
+
+        <div class="hero hero-analytics">
+
+            <h1>
+
+                📊 Analytics
+
+            </h1>
+
+            <p>
+
+                Estadísticas financieras y rendimiento de Jhonder Capital S.A.C.
+
+            </p>
+
+        </div>
+
+        <!-- TARJETAS -->
+
+        <div class="cards">
+
+            <div class="card">
+
+                <h3>
+
+                    Ganancia total
+
+                </h3>
+
+                <h2 id="gananciaTotal">
+
+                    S/ 0.00
+
+                </h2>
+
+            </div>
+
+            <div class="card">
+
+                <h3>
+
+                    Capital invertido
+
+                </h3>
+
+                <h2 id="capitalInvertido">
+
+                    S/ 0.00
+
+                </h2>
+
+            </div>
+
+            <div class="card">
+
+                <h3>
+
+                    Operaciones
+
+                </h3>
+
+                <h2 id="totalOperaciones">
+
+                    0
+
+                </h2>
+
+            </div>
+
+            <div class="card">
+
+                <h3>
+
+                    Clientes únicos
+
+                </h3>
+
+                <h2 id="clientesUnicos">
+
+                    0
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <br>
+
+        <!-- PANELES -->
+
+        <br>
+
+        <!-- GRAFICO 1 -->
+
+        <div class="card grafico-card">
+
+    <h2>📊 Capital vs Ganancia</h2>
+
+    <div class="contenedor-grafico">
+
+        <canvas id="graficoOperaciones"></canvas>
+
+    </div>
+
 </div>
+        <br>
 
-<br>
+        <!-- GRAFICO 2 -->
 
-<div class="card">
+        <div class="card grafico-card">
 
-    <h2>📊 Compras vs ventas</h2>
-
-
-    <canvas id="graficoOperaciones"></canvas>
-
-</div>
-
-<br>
-
-<div class="card">
-
-    <h2>📈 Evolución de ganancias</h2>
+    <h2>📈 Evolución del capital</h2>
 
     <canvas id="graficoGanancias"></canvas>
 
 </div>
 
-<br>
-
-
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script src="../js/storage.js"></script>
-<script src="../js/analytics.js"></script>
 
-</body>
+    <script src="../js/analytics.js"></script>
 
-</html>
 </body>
 
 </html>

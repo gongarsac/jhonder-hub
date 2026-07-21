@@ -32,7 +32,7 @@ formulario.addEventListener("submit", function (e) {
 
     };
 //console.log("DATOS ENVIADOS:", compra);
-    agregarOperacion(compra);
+    // agregarOperacion(compra);
     
 fetch(
     "https://script.google.com/macros/s/AKfycbzcHOHVuDROdxvb6KuuTTeCxarXRv6CaNu0p-JU2oByjiu_3ZYJJhDyKl-tLUmvoyUXTw/exec",
@@ -98,9 +98,9 @@ function calcularTotal() {
 
 }
 
-function cargarCompras() {
+async function cargarCompras() {
 
-    const operaciones = obtenerOperaciones();
+    const operaciones = await obtenerOperacionesSheets();
 
     const tbody = document.querySelector(
         "#tablaCompras tbody"
@@ -136,7 +136,7 @@ function cargarCompras() {
 
                 <td>${compra.cantidad.toFixed(2)}</td>
 
-                <td>S/ ${compra.precio.toFixed(4)}</td>
+                <td>S/ ${compra.precio.toFixed(3)}</td>
 
                 <td>S/ ${compra.total.toFixed(2)}</td>
 
@@ -148,23 +148,13 @@ function cargarCompras() {
 
                 <td class="acciones">
 
-                    <button
-                        class="btn-editar"
-                        onclick="editarCompra('${compra.id}')"
-                    >
+                   <button
+    class="btn-eliminar"
+    onclick="eliminarCompra('${compra.id}')"
+>
+    🗑️
+</button>
 
-                        ✏️
-
-                    </button>
-
-                    <button
-                        class="btn-eliminar"
-                        onclick="eliminarCompra('${compra.id}')"
-                    >
-
-                        🗑️
-
-                    </button>
 
                 </td>
 
@@ -186,7 +176,7 @@ function cargarCompras() {
 
 }
 
-function eliminarCompra(id) {
+async function eliminarCompra(id) {
 
     const confirmar = confirm(
         "¿Deseas eliminar esta compra?"
@@ -194,15 +184,27 @@ function eliminarCompra(id) {
 
     if (!confirmar) return;
 
-    let operaciones = obtenerOperaciones();
+    let operaciones = await obtenerOperacionesSheets();
 
     operaciones = operaciones.filter(
-        operacion => operacion.id !== id
+        op => op.id !== id
     );
 
-    actualizarOperaciones(operaciones);
+    await fetch(URL_API, {
+    method: "POST",
+    body: JSON.stringify({
+        tipo: "EliminarCompra",
+        id: id
+    })
+});
 
-    cargarCompras();
+actualizarOperaciones(operaciones);
+
+cargarCompras();
+
+    alert(
+        "✅ Compra eliminada."
+    );
 
 }
 
@@ -237,9 +239,9 @@ if (
         "operacionEditar"
     );
 }
-function editarCompra(id) {
+async function editarCompra(id) {
 
-    const operaciones = obtenerOperaciones();
+    const operaciones = await obtenerOperacionesSheets();
 
     const compra = operaciones.find(
 
@@ -248,30 +250,6 @@ function editarCompra(id) {
     );
 
     if (!compra) return;
-
-    document.getElementById("fecha").value =
-
-        compra.fecha;
-
-    document.getElementById("cliente").value =
-
-        compra.cliente;
-
-    document.getElementById("banco").value =
-
-        compra.banco;
-
-    document.getElementById("cantidad").value =
-
-        compra.cantidad;
-
-    document.getElementById("precio").value =
-
-        compra.precio;
-
-    document.getElementById("total").value =
-
-        compra.total;
 
     const nuevasOperaciones = operaciones.filter(
 
@@ -285,13 +263,15 @@ function editarCompra(id) {
 
     );
 
-    cargarCompras();
+    localStorage.setItem(
 
-    alert(
+        "operacionEditar",
 
-        "✏️ Compra cargada para editar."
+        JSON.stringify(compra)
 
     );
+
+    window.location.reload();
 
 }
 function cargarClientesSelect() {
@@ -321,7 +301,6 @@ function cargarClientesSelect() {
 cargarClientesSelect();
 cargarCompras();
 
-window.editarCompra = editarCompra;
 window.eliminarCompra = eliminarCompra;
 
 console.log("compras.js cargado correctamente");

@@ -6,45 +6,21 @@ function verDiasGuardados() {
 
     ) || [];
 
-    const anio = document.getElementById(
-        "filtroAnio"
-    ).value;
-
-    const mes = document.getElementById(
-        "filtroMes"
-    ).value;
-
-    let diasFiltrados = historialDias;
-
-    if (anio !== "") {
-
-        diasFiltrados = diasFiltrados.filter(
-
-            dia => dia.fecha.split("-")[0] === anio
-
-        );
-
-    }
-
-    if (mes !== "") {
-
-        diasFiltrados = diasFiltrados.filter(
-
-            dia => dia.fecha.split("-")[1] === mes
-
-        );
-
-    }
-
     const contenedor = document.getElementById(
 
         "listaDiasCerrados"
 
     );
 
+    if (!contenedor) {
+
+        return;
+
+    }
+
     contenedor.innerHTML = "";
 
-    if (diasFiltrados.length === 0) {
+    if (historialDias.length === 0) {
 
         contenedor.innerHTML = `
 
@@ -53,27 +29,41 @@ function verDiasGuardados() {
         `;
 
         return;
+
     }
 
-    diasFiltrados.forEach(dia => {
+    historialDias.forEach(dia => {
 
         contenedor.innerHTML += `
 
             <div class="dia-cerrado"
-                 onclick="abrirDia('${dia.fecha}')">
+
+                onclick="abrirDia('${dia.fecha}')">
 
                 <h3>📅 ${dia.fecha}</h3>
 
-                <p>Operaciones: ${dia.operaciones.length}</p>
+                <p>
 
-                <p>Ganancia: S/ ${Number(
-                    dia.ganancia || 0
-                ).toFixed(2)}</p>
+                    Operaciones:
 
-                <p>USDT vendidos:
-                    ${Number(
-                        dia.vendidos || 0
-                    ).toFixed(2)}
+                    ${dia.operaciones.length}
+
+                </p>
+
+                <p>
+
+                    Ganancia:
+
+                    S/ ${Number(dia.ganancia || 0).toFixed(2)}
+
+                </p>
+
+                <p>
+
+                    USDT vendidos:
+
+                    ${Number(dia.vendidos || 0).toFixed(2)}
+
                 </p>
 
             </div>
@@ -84,22 +74,73 @@ function verDiasGuardados() {
 
 }
 
-cargarHistorial();
+    async function cerrarDiaManual() {
 
+    const fecha = document.getElementById(
+        "fechaManual"
+    ).value;
 
-
-function cerrarDia() {
-
-    const operaciones = obtenerOperaciones();
-
-    if (operaciones.length === 0) {
+    if (!fecha) {
 
         alert(
-            "No hay operaciones para cerrar."
+            "Selecciona una fecha."
         );
 
         return;
     }
+
+    const operaciones = await obtenerOperacionesSheets();
+
+    const hoy = document.getElementById(
+    "fechaManual"
+).value;
+
+    const operacionesDia = operaciones.filter(
+    op => op.fecha.split("T")[0] === hoy
+);
+    if (operacionesDia.length === 0) {
+
+        alert(
+            "No hay operaciones para esa fecha."
+        );
+
+        return;
+    }
+
+    console.log(
+        "Operaciones encontradas:",
+        operacionesDia
+    );
+
+    alert(
+    `Se encontraron ${operacionesDia.length} operaciones del ${hoy}`
+);
+
+}
+async function cerrarDia() {
+
+
+
+    const todasLasOperaciones =
+    await obtenerOperacionesSheets();
+
+    const hoy = document.getElementById(
+    "fechaManual"
+).value;
+
+const operaciones = todasLasOperaciones.filter(
+    op => op.fecha.split("T")[0] === hoy
+);
+
+if (operaciones.length === 0) {
+
+    alert(
+        "No hay operaciones para esa fecha."
+    );
+
+    return;
+
+}
 
     const historialDias = JSON.parse(
 
@@ -108,9 +149,16 @@ function cerrarDia() {
         )
 
     ) || [];
-  let hoy = new Date()
-    .toISOString()
-    .split("T")[0];
+  
+if (!hoy) {
+
+    alert(
+        "Selecciona una fecha."
+    );
+
+    return;
+
+}
 
 const yaExiste = historialDias.find(
     dia => dia.fecha === hoy
@@ -174,11 +222,7 @@ const comprasDia = operaciones
         0
     );
 
-const capitalActual = document
-    .getElementById("capitalActual")
-    ?.textContent
-    ?.replace("S/", "")
-    ?.trim() || "0";
+const capitalActual = 0;
 
 
 console.log({
@@ -192,38 +236,49 @@ console.log({
     capital: capitalActual
 
 });
-fetch(
-    "https://script.google.com/macros/s/AKfycbzcHOHVuDROdxvb6KuuTTeCxarXRv6CaNu0p-JU2oByjiu_3ZYJJhDyKl-tLUmvoyUXTw/exec",
-    {
 
-        method: "POST",
+console.log({
 
-        body: JSON.stringify({
+    tipo: "Calendario",
 
-            tipo: "Calendario",
+    fecha: hoy,
 
-            fecha: hoy,
+    compras: comprasDia,
 
-            compras: comprasDia,
+    ventas: usdtVendidos,
 
-            ventas: usdtVendidos,
+    ganancia: gananciaDia,
 
-            ganancia: gananciaDia,
-
-            capital: capitalActual
-
-        })
-
-    }
-)
-.catch(error => {
-
-    console.error(
-        "Error enviando calendario:",
-        error
-    );
+    capital: capitalActual
 
 });
+
+console.log({
+    comprasDia,
+    usdtVendidos,
+    gananciaDia,
+    capitalActual
+});
+await fetch(
+    "https://script.google.com/macros/s/AKfycbzcHOHVuDROdxvb6KuuTTeCxarXRv6CaNu0p-JU2oByjiu_3ZYJJhDyKl-tLUmvoyUXTw/exec",
+    {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+            "Content-Type": "text/plain"
+        },
+        body: JSON.stringify({
+            tipo: "Calendario",
+            fecha: hoy,
+            compras: comprasDia,
+            ventas: usdtVendidos,
+            ganancia: gananciaDia,
+            capital: capitalActual
+        })
+    }
+);
+
+
 
     localStorage.setItem(
 
@@ -333,6 +388,12 @@ function cargarFiltrosHistorial() {
         "filtroMes"
     );
 
+    if (!selectAnio || !selectMes) {
+
+    return;
+
+}
+
     selectAnio.innerHTML = `
         <option value="">
             Seleccionar año
@@ -371,49 +432,7 @@ function cargarFiltrosHistorial() {
 
     });
 
-    selectAnio.addEventListener("change", () => {
-
-        const meses = [
-
-            ...new Set(
-
-                historialDias
-
-                    .filter(
-                        dia =>
-                            dia.fecha.split("-")[0] ===
-                            selectAnio.value
-                    )
-
-                    .map(
-                        dia => dia.fecha.split("-")[1]
-                    )
-
-            )
-
-        ];
-
-        selectMes.innerHTML = `
-            <option value="">
-                Seleccionar mes
-            </option>
-        `;
-
-        meses.forEach(mes => {
-
-            selectMes.innerHTML += `
-
-                <option value="${mes}">
-
-                    ${mes}
-
-                </option>
-
-            `;
-
-        });
-
-    });
+    
 
 }
 
@@ -447,6 +466,7 @@ function abrirDia(fecha) {
 
 }
 async function cargarHistorial(operaciones = null) {
+    console.log("ENTRÉ A cargarHistorial");
 
     let listaOperaciones = operaciones || await obtenerOperacionesSheets();
     console.log(listaOperaciones);
@@ -521,6 +541,8 @@ document.getElementById(
         "contenedorHistorial"
 
     );
+    console.log("Contenedor:", contenedor);
+console.log("Operaciones:", listaOperaciones);
 
     if (!contenedor) {
 
@@ -553,13 +575,10 @@ document.getElementById(
                     <tr>
 
                         <th>Tipo</th>
-
-                        <th>Cliente</th>
-
-                        <th>Banco</th>
-
-                        <th>USDT</th>
-
+                           <th>Cliente</th>
+                           <th>Banco</th>
+                           <th>Precio</th>
+                           <th>USDT</th>
                         <th>Total</th>
 
                     </tr>
@@ -573,14 +592,21 @@ document.getElementById(
                         <tr>
 
                             <td>${op.tipo}</td>
-
-                            <td>${op.cliente}</td>
-
-                            <td>${op.banco}</td>
-
-                            <td>${op.cantidad}</td>
-
-                            <td>S/ ${op.total}</td>
+                              <td>${op.cliente}</td>
+                              <td>${op.banco}</td>
+                              <td>S/ ${op.precio}</td>
+                              <td>${op.cantidad}</td>
+                             <td class="${
+                                op.tipo === "Venta"
+                                ? "ganancia-verde"
+                                : ""
+                                }">
+                                ${
+                                op.tipo === "Venta"
+                                ? "S/ " + (op.ganancia || 0).toFixed(2)
+                                : "S/ " + op.total
+                                }
+                            </td>
 
                         </tr>
 
@@ -667,7 +693,7 @@ localStorage.setItem(
 
     )
 
-);S
+);
 
     alert(
 
@@ -678,3 +704,4 @@ localStorage.setItem(
     location.reload();
 
 }
+cargarHistorial();

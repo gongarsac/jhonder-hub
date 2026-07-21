@@ -11,6 +11,8 @@
 
     <link rel="stylesheet" href="../css/dashboard.css">
 
+    <link rel="stylesheet" href="../css/historial.css">
+
 </head>
 
 <body>
@@ -94,48 +96,14 @@
 
 <br><br>
 
-<button onclick="cerrarDia()" class="btn-cerrar-dia">
 
-    🔒 Cerrar día
-
-</button>
-
-<button onclick="reabrirDia()" class="btn-reabrir-dia">
-
-    ↩️ Reabrir último día
-
-</button>
 
 <div class="historial-organizado">
 
     <h2>📂 Historial empresarial</h2>
 
-    <div class="filtros-historial">
-
-        <select id="filtroAnio">
-
-            <option value="">Seleccionar año</option>
-
-        </select>
-
-        <select id="filtroMes">
-
-            <option value="">Seleccionar mes</option>
-
-        </select>
-
-        <select id="filtroSemana">
-
-            <option value="">Seleccionar semana</option>
-
-        </select>
-
-        <button onclick="verDiasGuardados()">
-
-            📅 Buscar historial
-
-        </button>
-        <div id="listaDiasCerrados"></div>
+    
+        
         <div id="contenedorHistorial"></div>
 
     </div>
@@ -146,15 +114,6 @@
 <br><br>
 
 
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                </tbody>
-
-            </table>
 
         </div>
 
