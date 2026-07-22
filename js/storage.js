@@ -79,6 +79,15 @@ localStorage.setItem(
 );
 
 
+console.log(
+    operaciones
+        .filter(op => op.tipo === "Compra")
+        .map(op => ({
+            id: op.id,
+            disponible: op.disponible,
+            fecha: op.fecha
+        }))
+);
 return operaciones;
 
 }
