@@ -311,34 +311,14 @@ document.addEventListener(
     () => {
 
         const hoy = new Date()
-
             .toISOString()
-
             .split("T")[0];
 
         document.getElementById(
-            "fecha"
+            "fechaCompra"
         ).value = hoy;
 
     }
-);
-document.addEventListener(
-
-    "DOMContentLoaded",
-
-    () => {
-
-        const hoy = new Date();
-
-hoy.setMinutes(
-    hoy.getMinutes() - hoy.getTimezoneOffset()
-);
-
-document.getElementById("fechaCompra").value =
-    hoy.toISOString().split("T")[0];
-
-    }
-
 );
 const configuracion = JSON.parse(
     localStorage.getItem(
