@@ -306,20 +306,6 @@ window.eliminarCompra = eliminarCompra;
 console.log("compras.js cargado correctamente");
 
 });
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        const hoy = new Date()
-            .toISOString()
-            .split("T")[0];
-
-        document.getElementById(
-            "fechaCompra"
-        ).value = hoy;
-
-    }
-);
 const configuracion = JSON.parse(
     localStorage.getItem(
         "configuracion"
