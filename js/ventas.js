@@ -86,7 +86,9 @@ console.log("Resultado FIFO:", resultadoFIFO);
     "https://script.google.com/macros/s/AKfycbzcHOHVuDROdxvb6KuuTTeCxarXRv6CaNu0p-JU2oByjiu_3ZYJJhDyKl-tLUmvoyUXTw/exec",
     {
         method: "POST",
-        mode: "no-cors",
+        headers: {
+    "Content-Type": "text/plain;charset=utf-8"
+},
         body: JSON.stringify(venta)
     }
 )
