@@ -91,7 +91,7 @@ console.log("Resultado FIFO:", resultadoFIFO);
 },
         body: JSON.stringify(venta)
     }
-)
+) 
 .then(() => {
 
     console.log("VENTA ENVIADA:");
